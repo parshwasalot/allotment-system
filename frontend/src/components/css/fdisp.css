@@ -1,0 +1,80 @@
+.fdisp-body, .sdisp-body{
+    background-color: #3498db;
+}
+
+
+.display-container {
+    margin-top: 20px;
+    background-color: #3498db;
+}
+
+.display-container h2 {
+    margin-bottom: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+.display-container table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-color: #fff;
+}
+
+.display-container thead {
+    background-color: #fff;
+    color: #3498db;
+}
+
+.display-container tbody {
+    background-color: #3498db;
+    color: #fff;
+
+}
+
+.display-container th, .display-container td {
+    padding: 8px;
+    text-align: left;
+}
+
+.display-container th {
+    background-color: #fff;
+}
+
+.display-container tr:hover {
+    background-color: #fff;
+    color: #3498db;
+}
+
+.display-container td {
+    text-align: center;
+}
+
+.display-container button {
+    padding: 5px 10px;
+    background-color: #fff;
+    color: #3498db;
+    border: solid 1px;
+    border-radius: 20px;
+    border-color: #3498db;
+    cursor: pointer;
+}
+
+.display-container button:hover {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.popup {
+    color:#fff;
+    width: fit-content;
+    margin: auto
+}
+
+.popup-button {
+    margin-left: 10px;
+}
+
+.popup-close {
+    margin: 10px;
+}
