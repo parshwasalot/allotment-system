@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../css/register.css";
+import bcryptjs from "bcryptjs";
 
 const ChangePasswordWithOldPassword = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +31,6 @@ const ChangePasswordWithOldPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (formData.newPassword !== formData.confirmNewPassword) {
       alert("New passwords do not match");
       return;
@@ -42,8 +42,10 @@ const ChangePasswordWithOldPassword = () => {
     }
 
     try {
+      const hashedPassword = await bcryptjs.hash(formData.newPassword, 10);
+      console.log(id);
       const payload = {
-        newPassword: formData.newPassword,
+        newPassword: hashedPassword,
       };
 
       const passwordResponse = await axios.post(
@@ -53,7 +55,7 @@ const ChangePasswordWithOldPassword = () => {
 
       if (passwordResponse.data.success) {
         alert("Password changed successfully");
-        navigate("/ADash");
+        navigate("/FDash");
       } else {
         alert(passwordResponse.data.msg || "Password change failed");
       }
@@ -65,7 +67,7 @@ const ChangePasswordWithOldPassword = () => {
 
   return (
     <div className="register-body">
-      <div className="event-register-container">
+      <div className="pass-register-container">
         <div className="event-form-container">
           <h3>Change Password</h3>
           <form className="register-form" onSubmit={handleSubmit}>

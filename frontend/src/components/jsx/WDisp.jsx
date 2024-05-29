@@ -80,7 +80,7 @@ function WaitlistDisplay() {
     }
 
     const handleEdit = (id) => {
-        navigate(`/Edit/${id}`);
+        navigate(`/EventEdit/${id}`);
     };
 
     const formatDate = (dateString) => {
@@ -166,7 +166,7 @@ function WaitlistDisplay() {
                                     )}
                                 </td>
                                 <td>
-                                    {available[values._id] && available[values._id] === true ? (
+                                    {(values.username === username || cat === 'A') && available[values._id] && available[values._id] === true ? (
                                         <button className="available-btn" onClick={() => handleAvailableClick(values)}>Available</button>
                                     ) : (
                                         <span className="not-available">Not Available</span>

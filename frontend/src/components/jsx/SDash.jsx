@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import { useNavigate} from 'react-router-dom';
 import '../css/fdash.css';
+import axios from 'axios';
 
 function SDash(){
   const navigate = useNavigate();
@@ -25,10 +26,18 @@ function SDash(){
         }
     }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login', { replace: true });
-  };
+    const handleLogout = async () => {
+      try {
+        const username = localStorage.getItem('username');
+        await axios.post('http://127.0.0.1:4000/logging/logout', { username });
+  
+        localStorage.removeItem('token');
+        navigate('/login', { replace: true });
+      } catch (error) {
+        console.error('Error during logout:', error);
+        alert('An error occurred while logging out');
+      }
+    };
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');

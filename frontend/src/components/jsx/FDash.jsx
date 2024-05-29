@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/fdash.css';
+import axios from 'axios';
 
 function FDash() {
   const navigate = useNavigate();
@@ -27,9 +28,17 @@ function FDash() {
     }
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/', { replace: true });
+  const handleLogout = async () => {
+    try {
+      const username = localStorage.getItem('username');
+      await axios.post('http://127.0.0.1:4000/logging/logout', { username });
+
+      localStorage.removeItem('token');
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error('Error during logout:', error);
+      alert('An error occurred while logging out');
+    }
   };
 
   return (

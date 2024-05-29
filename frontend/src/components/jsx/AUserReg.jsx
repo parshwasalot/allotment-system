@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import bcryptjs from "bcryptjs";
 import { useNavigate } from "react-router-dom";
+import CryptoJS from "crypto-js";
 import "../css/register.css";
 
 const RegisterUser = () => {
@@ -12,6 +14,7 @@ const RegisterUser = () => {
     password: "",
     confirmPassword: "",
   });
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [token, setToken] = useState("");
   const username = localStorage.getItem("username");
@@ -27,28 +30,65 @@ const RegisterUser = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let newErrors = { ...errors };
+
+    if (name === "username" && value.length > 8) {
+      newErrors.username = "Username must be no more than 8 characters";
+    } else {
+      delete newErrors.username;
+    }
+
+    if (name === "password" && value.length > 6) {
+      newErrors.password = "Password must be no more than 6 characters";
+    } else {
+      delete newErrors.password;
+    }
+
     setFormData({
       ...formData,
       [name]: value,
     });
+
+    setErrors(newErrors);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.password.length > 6) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: "Password must be no more than 6 characters",
+      }));
+      return;
+    }
+
+    if (formData.username.length > 8) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        username: "Username must be no more than 8 characters",
+      }));
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
     try {
+      const hashedPassword = await bcryptjs.hash(formData.password, 10);
+      const hashedUName = CryptoJS.SHA256(formData.username).toString();
+
       const response = await axios.post("http://127.0.0.1:4000/user/register", {
-        username: formData.username,
+        username: hashedUName,
         name: formData.name,
         mobile: formData.mobile,
         cat: formData.cat,
-        password: formData.password,
+        password: hashedPassword,
       });
       alert("User registered successfully");
+      navigate('/ADash');
       console.log(response.data);
     } catch (error) {
       console.error("There was an error registering the user!", error);
@@ -71,6 +111,7 @@ const RegisterUser = () => {
               onChange={handleChange}
               required
             />
+            {errors.username && <p className="error">{errors.username}</p>}
 
             <label htmlFor="name">Name:</label>
             <input
@@ -132,6 +173,7 @@ const RegisterUser = () => {
               onChange={handleChange}
               required
             />
+            {errors.password && <p className="error">{errors.password}</p>}
 
             <label htmlFor="confirmPassword">Confirm Password:</label>
             <input

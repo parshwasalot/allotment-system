@@ -4,15 +4,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import "../css/register.css";
 
 const EditUser = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    name: "",
-    mobile: "",
-    cat: "",
-  });
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [mobile, setMobileNum] = useState("");
+  const [cat, setCat] = useState("");
+
   const navigate = useNavigate();
   const [token, setToken] = useState("");
-  const username = localStorage.getItem("username");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -24,6 +22,7 @@ const EditUser = () => {
   }, [navigate]);
 
   let { id } = useParams();
+  
   useEffect(() => {
     getData();
   }, []);
@@ -33,12 +32,10 @@ const EditUser = () => {
       .get(`http://127.0.0.1:4000/user/edit/${id}`)
       .then((response) => {
         const user = response.data;
-        setFormData({
-          username: user.username,
-          name: user.name,
-          mobile: user.mobile,
-          cat: user.cat,
-        });
+        setName(user.mydata.name);
+        setUsername(user.mydata.username);
+        setMobileNum(user.mydata.mobile);
+        setCat(user.mydata.cat);
       })
       .catch((error) => {
         console.error("There was an error fetching the user details!", error);
@@ -47,10 +44,22 @@ const EditUser = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    switch(name) {
+      case "username":
+        setUsername(value);
+        break;
+      case "name":
+        setName(value);
+        break;
+      case "mobile":
+        setMobileNum(value);
+        break;
+      case "cat":
+        setCat(value);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -58,14 +67,14 @@ const EditUser = () => {
 
     try {
       await axios.put(`http://127.0.0.1:4000/user/update/${id}`, {
-        username: formData.username,
-        name: formData.name,
-        mobile: formData.mobile,
-        cat: formData.cat,
+        username,
+        name,
+        mobile,
+        cat,
       });
 
       alert("User details updated successfully");
-      navigate("/ADash"); 
+      navigate("/ADash");
     } catch (error) {
       console.error("There was an error updating the user!", error);
       alert("Update failed");
@@ -74,7 +83,7 @@ const EditUser = () => {
 
   return (
     <div className="register-body">
-      <div className="event-register-container">
+      <div className="edit-register-container">
         <div className="event-form-container">
           <h3>Edit User</h3>
           <form className="register-form" onSubmit={handleSubmit}>
@@ -83,7 +92,7 @@ const EditUser = () => {
               type="text"
               id="username"
               name="username"
-              value={formData.username}
+              value={username}
               onChange={handleChange}
               required
             />
@@ -93,7 +102,7 @@ const EditUser = () => {
               type="text"
               id="name"
               name="name"
-              value={formData.name}
+              value={name}
               onChange={handleChange}
               required
             />
@@ -103,7 +112,7 @@ const EditUser = () => {
               type="text"
               id="mobile"
               name="mobile"
-              value={formData.mobile}
+              value={mobile}
               onChange={handleChange}
               required
             />
@@ -115,7 +124,7 @@ const EditUser = () => {
                 id="S"
                 name="cat"
                 value="S"
-                checked={formData.cat === "S"}
+                checked={cat === "S"}
                 onChange={handleChange}
               />
               <label htmlFor="S">S</label>
@@ -124,7 +133,7 @@ const EditUser = () => {
                 id="F"
                 name="cat"
                 value="F"
-                checked={formData.cat === "F"}
+                checked={cat === "F"}
                 onChange={handleChange}
               />
               <label htmlFor="F">F</label>
@@ -133,7 +142,7 @@ const EditUser = () => {
                 id="A"
                 name="cat"
                 value="A"
-                checked={formData.cat === "A"}
+                checked={cat === "A"}
                 onChange={handleChange}
               />
               <label htmlFor="A">A</label>

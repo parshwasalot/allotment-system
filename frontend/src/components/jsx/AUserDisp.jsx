@@ -66,7 +66,6 @@ function UserDisp() {
             <table border='1'>
                 <thead>
                     <tr>
-                        <th>User ID</th>
                         <th>Name</th>
                         <th>Mobile Number</th>
                         <th>Category</th>
@@ -79,7 +78,6 @@ function UserDisp() {
                     {mydata && mydata.length ? (
                         mydata.map((values, i) => (
                             <tr key={i+1}>
-                                <td>{values.username}</td>
                                 <td>{values.name}</td>
                                 <td>{values.mobile}</td>
                                 <td>{values.cat}</td>

@@ -8,11 +8,14 @@ function Register() {
   const [desp, setDescription] = React.useState("");
   const [club, setClub] = React.useState("");
   const [date, setDate] = React.useState("");
-  const [stime, setstime] = React.useState("");
-  const [etime, setetime] = React.useState("");
+  const [stime, setStime] = React.useState("");
+  const [etime, setEtime] = React.useState("");
   const [availableHalls, setAvailableHalls] = React.useState([]);
   const [message, setMessage] = React.useState("");
   const [availabilityChecked, setAvailabilityChecked] = React.useState(false);
+  const [inputsDisabled, setInputsDisabled] = React.useState(false);
+  const [bookButtonsDisabled, setBookButtonsDisabled] = React.useState(true);
+  const [errors, setErrors] = React.useState({});
   const navigate = useNavigate();
   const [token, setToken] = React.useState("");
   const username = localStorage.getItem("username");
@@ -94,11 +97,15 @@ function Register() {
       });
   };
 
-  const handleCheckAvailability = (event) => {
+  const handleCheckAvailability = async (event) => {
     event.preventDefault();
     if (isFormValid()) {
+      setInputsDisabled(true);
+      setBookButtonsDisabled(false);
       setAvailabilityChecked(true);
-      fetchAvailableHalls();
+      await fetchAvailableHalls();
+    } else {
+      setAvailabilityChecked(false);
     }
   };
 
@@ -128,9 +135,18 @@ function Register() {
     const selectedStime = parseTime(stime);
     const selectedEtime = parseTime(etime);
 
-    if (date < todayDate) return false;
-    if (date === todayDate && selectedStime < todayTime) return false;
-    if (selectedEtime <= selectedStime) return false;
+    if (date < todayDate) {
+      alert("The selected date is older than the current date. Please update the date.");
+      return false;
+    }
+    if (date === todayDate && selectedStime < todayTime) {
+      alert("The selected start time is earlier than the current time. Please update the start time.");
+      return false;
+    }
+    if (selectedEtime <= selectedStime) {
+      alert("The end time is earlier than or equal to the start time. Please update the end time.");
+      return false;
+    }
 
     return true;
   };
@@ -140,7 +156,50 @@ function Register() {
     return hours * 3600 + minutes * 60;
   };
 
-  const isValid = date && stime && etime && isFormValid();
+  const handleInputClick = () => {
+    setInputsDisabled(false);
+    setBookButtonsDisabled(true);
+    setAvailabilityChecked(false);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let newErrors = { ...errors };
+
+    if (name === "name" && value.length > 50) {
+      newErrors.name = "Name must be no more than 50 characters";
+    } else {
+      delete newErrors.name;
+    }
+
+    if (name === "club" && value.length > 50) {
+      newErrors.club = "Club must be no more than 50 characters";
+    } else {
+      delete newErrors.club;
+    }
+
+    if (name === "desp" && value.length > 150) {
+      newErrors.desp = "Description must be no more than 150 characters";
+    } else {
+      delete newErrors.desp;
+    }
+
+    setErrors(newErrors);
+
+    if (name === "name") {
+      setName(value);
+    } else if (name === "club") {
+      setClub(value);
+    } else if (name === "desp") {
+      setDescription(value);
+    } else if (name === "date") {
+      setDate(value);
+    } else if (name === "stime") {
+      setStime(value);
+    } else if (name === "etime") {
+      setEtime(value);
+    }
+  };
 
   return (
     <div className="event-register-container">
@@ -154,10 +213,15 @@ function Register() {
                 <td>
                   <input
                     type="text"
+                    name="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={handleChange}
                     required
+                    disabled={inputsDisabled}
+                    onClick={handleInputClick}
+                    placeholder="Max. 50 characters"
                   />
+                  {errors.name && <p className="error">{errors.name}</p>}
                 </td>
               </tr>
               <tr>
@@ -165,10 +229,15 @@ function Register() {
                 <td>
                   <textarea
                     type="text"
+                    name="desp"
                     value={desp}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={handleChange}
                     required
+                    disabled={inputsDisabled}
+                    onClick={handleInputClick}
+                    placeholder="Max. 150 characters"
                   ></textarea>
+                  {errors.desp && <p className="error">{errors.desp}</p>}
                 </td>
               </tr>
               <tr>
@@ -176,10 +245,14 @@ function Register() {
                 <td>
                   <input
                     type="text"
+                    name="club"
                     value={club}
-                    onChange={(e) => setClub(e.target.value)}
+                    onChange={handleChange}
                     required
+                    disabled={inputsDisabled}
+                    onClick={handleInputClick}
                   />
+                  {errors.club && <p className="error">{errors.club}</p>}
                 </td>
               </tr>
               <tr>
@@ -188,9 +261,12 @@ function Register() {
                   <input
                     className="dt"
                     type="date"
+                    name="date"
                     value={date}
-                    onChange={(e) => setDate(e.target.value)}
+                    onChange={handleChange}
                     required
+                    disabled={inputsDisabled}
+                    onClick={handleInputClick}
                   />
                 </td>
               </tr>
@@ -200,9 +276,12 @@ function Register() {
                   <input
                     className="dt"
                     type="time"
+                    name="stime"
                     value={stime}
-                    onChange={(e) => setstime(e.target.value)}
+                    onChange={handleChange}
                     required
+                    disabled={inputsDisabled}
+                    onClick={handleInputClick}
                   />
                 </td>
               </tr>
@@ -212,48 +291,49 @@ function Register() {
                   <input
                     className="dt"
                     type="time"
+                    name="etime"
                     value={etime}
-                    onChange={(e) => setetime(e.target.value)}
+                    onChange={handleChange}
                     required
+                    disabled={inputsDisabled}
+                    onClick={handleInputClick}
                   />
                 </td>
               </tr>
             </tbody>
           </table>
-          <button
-            className="book-button"
-            onClick={handleCheckAvailability}
-            disabled={!isValid}
-          >
+          <button className="book-button" onClick={handleCheckAvailability}>
             Check Availability
           </button>
         </form>
       </div>
-      {availabilityChecked && (
+      {availabilityChecked && availableHalls.length > 0 && (
         <div className="event-halls-container">
           <ul>
-            {availableHalls.length > 0 ? (
-              availableHalls.map((data) => (
-                <li key={data.s_name}>
-                  <span>
-                    {data.s_name} - {data.capacity}
-                  </span>
-                  <button
-                    className="book-button"
-                    onClick={() => submitValue(data.s_name)}
-                  >
-                    Book
-                  </button>
-                </li>
-              ))
-            ) : (
-              <>
-                <li>No halls available</li>
-                <button className="book-button" onClick={waitlist}>
-                  Join the Waitlist
+            {availableHalls.map((data) => (
+              <li key={data.s_name}>
+                <span>
+                  {data.s_name} - {data.capacity}
+                </span>
+                <button
+                  className="book-button"
+                  onClick={() => submitValue(data.s_name)}
+                  disabled={bookButtonsDisabled}
+                >
+                  Book
                 </button>
-              </>
-            )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {availabilityChecked && availableHalls.length === 0 && (
+        <div className="event-halls-container">
+          <ul>
+            <li>No halls available</li>
+            <button className="book-button" onClick={waitlist}>
+              Join the Waitlist
+            </button>
           </ul>
         </div>
       )}

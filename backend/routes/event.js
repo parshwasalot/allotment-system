@@ -3,6 +3,8 @@ const router = express.Router();
 
 //Import Model
 const EventModel = require('../models/event');
+const Waitlist = require('../models/waitlist');
+
 
 //register API
 router.post('/register', (req, res) => {
@@ -43,21 +45,47 @@ router.get('/display', (req, res) => {
   //Edit API
   router.get('/edit/:id', (req, res) => {
     EventModel.findById(req.params.id)
-    .then(data => {
-      console.log(data);
-      res.json({flag:1,msg:'Record found',mydata:data})
-    })
-    .catch(err => console.error(err));
-  });
-  
-  //Update
-  router.put('/update/:id', (req, res) => {
-    EventModel.findByIdAndUpdate(req.params.id, req.body)
-    .then(data => {
-      console.log(data);
-      res.json({flag:1,msg:'Record Updated',mydata:data})
-    })
-    .catch(err => console.error(err));
-  });
+        .then(data => {
+            if (data) {
+                res.json({ flag: 1, msg: 'Record found in EventModel', mydata: data });
+            } else {
+                return Waitlist.findById(req.params.id);
+            }
+        })
+        .then(data => {
+            if (data) {
+                res.json({ flag: 1, msg: 'Record found in WaitlistModel', mydata: data });
+            } else {
+                res.json({ flag: 0, msg: 'Record not found' });
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ flag: 0, msg: 'Error occurred', error: err });
+        });
+});
+
+// Update route
+router.put('/update/:id', (req, res) => {
+    EventModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        .then(data => {
+            if (data) {
+                res.json({ flag: 1, msg: 'Record updated in EventModel', mydata: data });
+            } else {
+                return Waitlist.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            }
+        })
+        .then(data => {
+            if (data) {
+                res.json({ flag: 1, msg: 'Record updated in WaitlistModel', mydata: data });
+            } else {
+                res.json({ flag: 0, msg: 'Record not found' });
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ flag: 0, msg: 'Error occurred', error: err });
+        });
+});
 
   module.exports = router;

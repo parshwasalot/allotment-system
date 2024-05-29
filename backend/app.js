@@ -16,8 +16,10 @@ const eventRouter = require('./routes/event');
 const hallsRouter = require('./routes/halls');
 const waitlistRouter = require('./routes/waitlist');
 const userRouter = require('./routes/user');
+const logLoginRouter = require('./routes/logging');
 
 app.use('/', indexRouter);
+app.use('/logging', logLoginRouter);
 app.use('/event', eventRouter);
 app.use('/halls', hallsRouter);
 app.use('/waitlist', waitlistRouter);

@@ -47,10 +47,11 @@ function Login() {
                 localStorage.setItem('username', mydata.username);
                 localStorage.setItem('cat',mydata.cat)
                 localStorage.setItem('name',mydata.name);
-                localStorage.setItem('pass',mydata.password);
+                localStorage.setItem('pass', password);
+
+                await axios.post('http://127.0.0.1:4000/logging/log-login', { username: mydata.username });
 
                 const category = mydata.cat;
-
                 if (category === 'S') {
                     navigate('/SDash');
                 } else if (category === 'F') {
