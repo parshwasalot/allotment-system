@@ -22,5 +22,8 @@
   "homepage": "https://github.com/parshwasalot/allotment-system.git#readme",
   "devDependencies": {
     "concurrently": "^7.6.0"
+  },
+  "browser": {
+    "crypto": false
   }
 }
