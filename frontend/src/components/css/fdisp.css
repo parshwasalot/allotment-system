@@ -78,3 +78,40 @@
 .popup-close {
     margin: 10px;
 }
+
+.display-container .search-bar {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Adds space between the input fields */
+}
+
+.display-container .search-bar input[type="text"] {
+    padding: 5px 10px;
+    border: solid 1px #fff;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #3498db;
+}
+
+.display-container .search-bar input[type="text"]::placeholder {
+    color: #3498db;
+}
+
+.display-container .search-bar input[type="text"]:focus {
+    outline: none;
+}
+
+.display-container .search-bar button {
+    padding: 5px 10px;
+    background-color: #fff;
+    color: #3498db;
+    border: solid 1px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.display-container .search-bar button:hover {
+    background-color: #3498db;
+    color: #fff;
+}

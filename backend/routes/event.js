@@ -43,18 +43,12 @@ router.get('/display', (req, res) => {
   });
   
   //Edit API
-  router.get('/edit/:id', (req, res) => {
+  // Edit API
+router.get('/edit/:id', (req, res) => {
     EventModel.findById(req.params.id)
         .then(data => {
             if (data) {
                 res.json({ flag: 1, msg: 'Record found in EventModel', mydata: data });
-            } else {
-                return Waitlist.findById(req.params.id);
-            }
-        })
-        .then(data => {
-            if (data) {
-                res.json({ flag: 1, msg: 'Record found in WaitlistModel', mydata: data });
             } else {
                 res.json({ flag: 0, msg: 'Record not found' });
             }
@@ -65,6 +59,8 @@ router.get('/display', (req, res) => {
         });
 });
 
+
+// Update route
 // Update route
 router.put('/update/:id', (req, res) => {
     EventModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -72,13 +68,6 @@ router.put('/update/:id', (req, res) => {
             if (data) {
                 res.json({ flag: 1, msg: 'Record updated in EventModel', mydata: data });
             } else {
-                return Waitlist.findByIdAndUpdate(req.params.id, req.body, { new: true });
-            }
-        })
-        .then(data => {
-            if (data) {
-                res.json({ flag: 1, msg: 'Record updated in WaitlistModel', mydata: data });
-            } else {
                 res.json({ flag: 0, msg: 'Record not found' });
             }
         })
@@ -88,4 +77,5 @@ router.put('/update/:id', (req, res) => {
         });
 });
 
-  module.exports = router;
+
+module.exports = router;

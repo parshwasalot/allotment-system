@@ -12,9 +12,9 @@ function FDisp(){
     React.useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
-        setToken(storedToken);
+            setToken(storedToken);
         } else {
-        navigate('/login');
+            navigate('/login');
         }
     }, [navigate]);
 
@@ -26,7 +26,12 @@ function FDisp(){
         };
     }, []);
     
-    const [mydata,setData] = React.useState([]);
+    const [mydata, setData] = React.useState([]);
+    const [searchName, setSearchName] = React.useState('');
+    const [searchClub, setSearchClub] = React.useState('');
+    const [searchDate, setSearchDate] = React.useState('');
+    const [searchHall, setSearchHall] = React.useState('');
+
     React.useEffect(() =>{
        getData();
     },[])
@@ -72,9 +77,45 @@ function FDisp(){
         return `${formattedDay}-${formattedMonth}-${year}`;
     };
 
+    // Filter function based on search criteria
+    const filteredData = mydata.filter(item => {
+        return (
+            item.name.toLowerCase().includes(searchName.toLowerCase()) &&
+            item.club.toLowerCase().includes(searchClub.toLowerCase()) &&
+            item.date.includes(searchDate) &&
+            item.s_name.toLowerCase().includes(searchHall.toLowerCase())
+        );
+    });
+
     return (
         <div className="display-container">
             <h2>Display Events</h2>
+            <div className="search-bar">
+                <input
+                    type="text"
+                    placeholder="Search by name"
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Search by club"
+                    value={searchClub}
+                    onChange={(e) => setSearchClub(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Search by date (YYYY-MM-DD)"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Search by hall name"
+                    value={searchHall}
+                    onChange={(e) => setSearchHall(e.target.value)}
+                />
+            </div>
             <table border='1'>
                 <thead>
                     <tr>
@@ -92,8 +133,8 @@ function FDisp(){
                     </tr>
                 </thead>
                 <tbody>
-                    {mydata && mydata.length ? (
-                        mydata.map((values, i) => (
+                    {filteredData && filteredData.length ? (
+                        filteredData.map((values, i) => (
                             <tr key={i+1}>
                                 <td>{i+1}</td>
                                 <td>{values.name}</td>
@@ -127,4 +168,4 @@ function FDisp(){
     );
 
 }
-export default FDisp;     
+export default FDisp;  

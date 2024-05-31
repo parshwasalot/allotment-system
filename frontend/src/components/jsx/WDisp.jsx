@@ -80,7 +80,7 @@ function WaitlistDisplay() {
     }
 
     const handleEdit = (id) => {
-        navigate(`/EventEdit/${id}`);
+        navigate(`/WEdit/${id}`);
     };
 
     const formatDate = (dateString) => {

@@ -143,7 +143,7 @@ function Edit() {
 
   const submitValue = (selectedHallName) => {
     axios
-      .put(`http://localhost:4000/event/update/${id}`, {
+      .post(`http://localhost:4000/event/register`, {
         name,
         desp,
         club,
@@ -154,10 +154,22 @@ function Edit() {
         username,
       })
       .then((res) => {
-        console.log(res);
         if (res.data.flag === 1) {
-          alert("Record Updated Successfully");
-          navigate("/FDisp");
+          alert("Record Booked Successfully");
+          // Hall booked successfully, now delete the waitlist entry
+          axios
+            .delete(`http://localhost:4000/waitlist/delete/${id}`)
+            .then((deleteRes) => {
+              if (deleteRes.data.flag === 1) {
+                alert("Record Deleted Successfully");
+                navigate("/WDisp");
+              } else {
+                alert("Error deleting waitlist entry");
+              }
+            })
+            .catch((err) => {
+              console.log("Error deleting waitlist entry: ", err);
+            });
         } else {
           alert("Something went wrong");
         }
@@ -165,36 +177,9 @@ function Edit() {
       .catch((err) => console.log(err));
   };
 
-  const waitlist = () => {
-    axios
-      .post("http://127.0.0.1:4000/waitlist/register", {
-        name,
-        desp,
-        club,
-        date,
-        stime,
-        etime,
-        username,
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.data.flag === 1) {
-          alert("Joined the Waitlist!");
-          navigate("/WDisp");
-        } else {
-          alert("Something went wrong");
-        }
-        setMessage(res.data.message);
-      })
-      .catch((error) => {
-        alert("Error Occurred: " + error);
-        console.log(error);
-      });
-  };
-
   const handleUpdate = () => {
     axios
-      .put(`http://localhost:4000/event/update/${id}`, {
+      .put(`http://localhost:4000/waitlist/update/${id}`, {
         name,
         desp,
         club,
@@ -207,7 +192,7 @@ function Edit() {
         console.log(res);
         if (res.data.flag === 1) {
           alert("Record Updated Successfully");
-          navigate("/FDisp");
+          navigate("/WDisp");
         } else {
           alert("Something went wrong");
         }
@@ -344,12 +329,13 @@ function Edit() {
               </tr>
             </tbody>
           </table>
-          <button className="book-button" onClick={handleCheckAvailability}>
-            Check Availability
-          </button>
-          {(date === originalDate && stime === originalStime && etime === originalEtime) && (
+          {date === originalDate && stime === originalStime && etime === originalEtime ? (
             <button className="book-button" onClick={handleUpdate}>
               Update
+            </button>
+          ) : (
+            <button className="book-button" onClick={handleCheckAvailability}>
+              Check Availability
             </button>
           )}
         </form>
@@ -373,12 +359,7 @@ function Edit() {
                 </li>
               ))
             ) : (
-              <>
-                <li>No halls available</li>
-                <button onClick={waitlist} className="book-button">
-                  Join the Waitlist
-                </button>
-              </>
+              <li>No halls available. Please update the date and time.</li>
             )}
           </ul>
         )}

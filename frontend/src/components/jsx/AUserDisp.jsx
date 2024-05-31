@@ -6,6 +6,8 @@ import '../css/fdisp.css';
 function UserDisp() {
     const navigate = useNavigate();
     const [token, setToken] = React.useState('');
+    const [nameSearch, setNameSearch] = React.useState('');
+    const [categorySearch, setCategorySearch] = React.useState('');
 
     React.useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -60,9 +62,36 @@ function UserDisp() {
         navigate(`/UserChPass/${id}`);
     };
 
+    const handleNameSearchChange = (e) => {
+        setNameSearch(e.target.value);
+    };
+
+    const handleCategorySearchChange = (e) => {
+        setCategorySearch(e.target.value);
+    };
+
+    const filteredData = mydata.filter((user) => 
+        (user.name && user.name.toLowerCase().includes(nameSearch.toLowerCase())) && 
+        (user.cat && user.cat.toLowerCase().includes(categorySearch.toLowerCase()))
+    );
+
     return (
         <div className="display-container">
             <h2>Display Users</h2>
+            <div className="search-bar">
+                <input 
+                    type="text" 
+                    placeholder="Search by name" 
+                    value={nameSearch}
+                    onChange={handleNameSearchChange}
+                />
+                <input 
+                    type="text" 
+                    placeholder="Search by category" 
+                    value={categorySearch}
+                    onChange={handleCategorySearchChange}
+                />
+            </div>
             <table border='1'>
                 <thead>
                     <tr>
@@ -75,8 +104,8 @@ function UserDisp() {
                     </tr>
                 </thead>
                 <tbody>
-                    {mydata && mydata.length ? (
-                        mydata.map((values, i) => (
+                    {filteredData && filteredData.length ? (
+                        filteredData.map((values, i) => (
                             <tr key={i+1}>
                                 <td>{values.name}</td>
                                 <td>{values.mobile}</td>

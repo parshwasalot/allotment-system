@@ -15,6 +15,7 @@ import EventEdit from './components/jsx/EventEdit';
 import SDash from './components/jsx/SDash';
 import SDisp from './components/jsx/SDisp';
 import WDisp from './components/jsx/WDisp';
+import WEdit from './components/jsx/WaitlistEdit';
 import {BrowserRouter as Router,Routes,Route, Switch} from 'react-router-dom';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Route path="/FUCP/:id" element={<ProtectedRoute element={FUCP} />} />
           <Route path="/SDisp" element={<ProtectedRoute element={SDisp} />} />
           <Route path="/WDisp" element={<ProtectedRoute element={WDisp} />} />
+          <Route path="/WEdit/:id" element={<ProtectedRoute element={WEdit} />} />
           <Route path="/ADash" element={<ProtectedRoute element={ADash} />} />
           <Route path="/UserReg" element={<ProtectedRoute element={UserReg} />} />
           <Route path="/UserDisp" element={<ProtectedRoute element={UserDisp} />} />

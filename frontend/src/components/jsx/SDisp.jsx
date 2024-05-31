@@ -3,45 +3,40 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/fdisp.css';
 
-function Display(){
+function Display() {
     const navigate = useNavigate();
 
-    const [mydata,setData] = React.useState([]);
-    React.useEffect(() =>{
-       getData();
-    },[])
-
-    React.useEffect(() => {
-        document.body.classList.add('sdisp-body');
-        
-        return () => {
-            document.body.classList.remove('sdisp-body');
-        };
-    }, []);
-
-    const getData = () => {
-    axios.get("http://localhost:4000/event/display")
-        .then(res => {
-            console.log(res.data); 
-            // Sort the data by date in ascending order
-            const sortedData = res.data.mydata.sort((a, b) => new Date(a.date) - new Date(b.date));
-            setData(sortedData);
-        }).catch((error) => {
-            alert("Error Ocurred: " + error);
-            console.log(error)
-        })
-    }
-
+    const [mydata, setData] = React.useState([]);
     const [token, setToken] = React.useState('');
+    const [searchName, setSearchName] = React.useState('');
+    const [searchClub, setSearchClub] = React.useState('');
+    const [searchDate, setSearchDate] = React.useState('');
+    const [searchHall, setSearchHall] = React.useState('');
 
     React.useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
-        setToken(storedToken);
+            setToken(storedToken);
+            // Set JWT token in request headers
+            axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+            getData(); // Fetch data after setting the token
         } else {
-        navigate('/');
+            navigate('/');
         }
     }, [navigate]);
+
+    const getData = () => {
+        axios.get("http://localhost:4000/event/display")
+            .then(res => {
+                console.log(res.data);
+                // Sort the data by date in ascending order
+                const sortedData = res.data.mydata.sort((a, b) => new Date(a.date) - new Date(b.date));
+                setData(sortedData);
+            }).catch((error) => {
+                alert("Error Ocurred: " + error);
+                console.log(error)
+            })
+    }
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -55,9 +50,45 @@ function Display(){
         return `${formattedDay}-${formattedMonth}-${year}`;
     };
 
+    // Filter function based on search criteria
+    const filteredData = mydata.filter(item => {
+        return (
+            item.name.toLowerCase().includes(searchName.toLowerCase()) &&
+            item.club.toLowerCase().includes(searchClub.toLowerCase()) &&
+            item.date.includes(searchDate) &&
+            item.s_name.toLowerCase().includes(searchHall.toLowerCase())
+        );
+    });
+
     return (
         <div className="display-container">
             <h2>Display Events</h2>
+            <div>
+                <input
+                    type="text"
+                    placeholder="Search by name"
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Search by club"
+                    value={searchClub}
+                    onChange={(e) => setSearchClub(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Search by date (YYYY-MM-DD)"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Search by hall name"
+                    value={searchHall}
+                    onChange={(e) => setSearchHall(e.target.value)}
+                />
+            </div>
             <table border='1'>
                 <thead>
                     <tr>
@@ -69,14 +100,14 @@ function Display(){
                         <th>Start Time</th>
                         <th>End Time</th>
                         <th>Seminar Hall</th>
-                        <th>Faculty Coordinator</th>             
+                        <th>Faculty Coordinator</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {mydata && mydata.length ? (
-                        mydata.map((values, i) => (
-                            <tr key={i+1}>
-                                <td>{i+1}</td>
+                    {filteredData && filteredData.length ? (
+                        filteredData.map((values, i) => (
+                            <tr key={i + 1}>
+                                <td>{i + 1}</td>
                                 <td>{values.name}</td>
                                 <td>{values.desp}</td>
                                 <td>{values.club}</td>
@@ -98,4 +129,4 @@ function Display(){
     );
 
 }
-export default Display;     
+export default Display;
