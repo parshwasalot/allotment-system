@@ -55,7 +55,7 @@ function Edit() {
 
   const fetchAvailableHalls = async () => {
     try {
-      const res = await axios.post("http://127.0.0.1:4000/halls/available-halls", {
+      const res = await axios.post("https://allotment-system.onrender.com/halls/available-halls", {
         date,
         stime,
         etime,
@@ -143,7 +143,7 @@ function Edit() {
 
   const submitValue = (selectedHallName) => {
     axios
-      .post(`http://localhost:4000/event/register`, {
+      .post(`https://allotment-system.onrender.com/event/register`, {
         name,
         desp,
         club,
@@ -179,7 +179,7 @@ function Edit() {
 
   const handleUpdate = () => {
     axios
-      .put(`http://localhost:4000/waitlist/update/${id}`, {
+      .put(`https://allotment-system.onrender.com/waitlist/update/${id}`, {
         name,
         desp,
         club,
@@ -207,7 +207,7 @@ function Edit() {
   const getData = () => {
     console.log(id);
     axios
-      .get(`http://localhost:4000/event/edit/${id}`)
+      .get(`https://allotment-system.onrender.com/event/edit/${id}`)
       .then((res) => {
         console.log(res.data);
         setName(res.data.mydata.name);
