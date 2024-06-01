@@ -43,7 +43,7 @@ const ChangePassword = () => {
       };
   
       const passwordResponse = await axios.post(
-        `http://127.0.0.1:4000/user/changePassword/${id}`,
+        `https://allotment-system.onrender.com/user/changePassword/${id}`,
         payload
       );
   
