@@ -29,7 +29,7 @@ const EditUser = () => {
 
   const getData = () => {
     axios
-      .get(`http://127.0.0.1:4000/user/edit/${id}`)
+      .get(`https://allotment-system.onrender.com/user/edit/${id}`)
       .then((response) => {
         const user = response.data;
         setName(user.mydata.name);
@@ -66,7 +66,7 @@ const EditUser = () => {
     e.preventDefault();
 
     try {
-      await axios.put(`http://127.0.0.1:4000/user/update/${id}`, {
+      await axios.put(`https://allotment-system.onrender.com/user/update/${id}`, {
         username,
         name,
         mobile,

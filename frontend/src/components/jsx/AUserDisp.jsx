@@ -32,7 +32,7 @@ function UserDisp() {
     }, []);
 
     const getData = () => {
-        axios.get("http://localhost:4000/user/display")
+        axios.get("https://allotment-system.onrender.com/user/display")
             .then(res => {
                 console.log(res.data); 
                 setData(res.data.mydata);
@@ -43,7 +43,7 @@ function UserDisp() {
     }
 
     const deleteData = (id) => {
-        axios.delete(`http://localhost:4000/user/delete/${id}`)
+        axios.delete(`https://allotment-system.onrender.com/user/delete/${id}`)
             .then((res) => {
                 console.log('Successfully deleted!');
                 alert(res.data.msg);

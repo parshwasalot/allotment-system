@@ -26,7 +26,7 @@ function Display() {
     }, [navigate]);
 
     const getData = () => {
-        axios.get("http://localhost:4000/event/display")
+        axios.get("https://allotment-system.onrender.com/event/display")
             .then(res => {
                 console.log(res.data);
                 // Sort the data by date in ascending order
@@ -63,7 +63,7 @@ function Display() {
     return (
         <div className="display-container">
             <h2>Display Events</h2>
-            <div>
+            <div class="search-bar">
                 <input
                     type="text"
                     placeholder="Search by name"

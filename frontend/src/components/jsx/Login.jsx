@@ -36,7 +36,7 @@ function Login() {
         event.preventDefault();
         
         try {
-            const response = await axios.post('http://127.0.0.1:4000/login', { username, password });
+            const response = await axios.post('https://allotment-system.onrender.com/login', { username, password });
             
             if (response.data.flag === 1) {
                 const { token, mydata } = response.data;
@@ -49,7 +49,7 @@ function Login() {
                 localStorage.setItem('name',mydata.name);
                 localStorage.setItem('pass', password);
 
-                await axios.post('http://127.0.0.1:4000/logging/log-login', { username: mydata.username });
+                await axios.post('https://allotment-system.onrender.com/logging/log-login', { username: mydata.username });
 
                 const category = mydata.cat;
                 if (category === 'S') {
@@ -76,7 +76,7 @@ function Login() {
             <form onSubmit={submitValue}>
                 <label>
                     <input 
-                    id='login-inp'
+                    class='login-inp'
                         type="text" 
                         value={username} 
                         onChange={e => setUsername(e.target.value)}
@@ -86,7 +86,7 @@ function Login() {
                 </label><br />
                 <label>
                     <input 
-                    id='login-inp'
+                    class='login-inp'
                         type="password" 
                         value={password} 
                         onChange={e => setPassword(e.target.value)} 
