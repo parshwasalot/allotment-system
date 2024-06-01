@@ -26,7 +26,7 @@ function Display() {
     }, [navigate]);
 
     const getData = () => {
-        axios.get("http://localhost:4000/event/display")
+        axios.get("https://allotment-system.onrender.com/event/display")
             .then(res => {
                 console.log(res.data);
                 // Sort the data by date in ascending order
