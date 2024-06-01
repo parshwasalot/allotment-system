@@ -8,6 +8,8 @@ function FDash() {
   const [token, setToken] = useState('');
   const name = localStorage.getItem('name');
   const id = localStorage.getItem('userid');
+  const cat = localStorage.getItem('cat');
+
   console.log(id);
 
   useEffect(() => {

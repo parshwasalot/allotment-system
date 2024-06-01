@@ -8,6 +8,7 @@ function SDash(){
   const navigate = useNavigate();
   const [token, setToken] = React.useState('');
   const name = localStorage.getItem('name');
+  const cat = localStorage.getItem('cat');
 
   useEffect(() => {
     document.body.classList.add('fdash-body');
