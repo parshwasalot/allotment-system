@@ -78,10 +78,9 @@ const RegisterUser = () => {
 
     try {
       const hashedPassword = await bcryptjs.hash(formData.password, 10);
-      const hashedUName = CryptoJS.SHA256(formData.username).toString();
 
-      const response = await axios.post("http://127.0.0.1:4000/user/register", {
-        username: hashedUName,
+      const response = await axios.post("https://allotment-system.onrender.com/user/register", {
+        username: formData.username,
         name: formData.name,
         mobile: formData.mobile,
         cat: formData.cat,
