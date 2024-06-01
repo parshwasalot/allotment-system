@@ -63,7 +63,7 @@ function Display() {
     return (
         <div className="display-container">
             <h2>Display Events</h2>
-            <div>
+            <div class="search-bar">
                 <input
                     type="text"
                     placeholder="Search by name"
