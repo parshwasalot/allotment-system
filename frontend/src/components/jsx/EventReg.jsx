@@ -20,6 +20,7 @@ function Register() {
   const [token, setToken] = React.useState("");
   const username = localStorage.getItem("username");
   const faclname = localStorage.getItem("name");
+  const cat = localStorage.getItem("cat");
 
   React.useEffect(() => {
     document.body.classList.add("register-body");
@@ -35,7 +36,7 @@ function Register() {
     if (storedToken) {
       setToken(storedToken);
     } else {
-      navigate("/");
+      navigate("/login");
     }
   }, [navigate, username]);
 
@@ -57,17 +58,24 @@ function Register() {
         if (res.data.flag === 1) {
           alert("Record Successful");
           console.log(navigate);
-          navigate("/FDash");
+        
+          // Navigate based on the value of cat
+          if (cat === 'A') {
+            navigate("/ADash");
+          } else if (cat === 'F') {
+            navigate("/FDash");
+          }
+        
         } else {
           alert("Something went wrong");
         }
         setMessage(res.data.message);
         fetchAvailableHalls();
-      })
-      .catch((error) => {
-        alert("Error Occurred: " + error);
-        console.log(error);
-      });
+        })
+        .catch((error) => {
+          alert("Error Occurred: " + error);
+          console.log(error);
+        });        
   };
 
   const waitlist = () => {
