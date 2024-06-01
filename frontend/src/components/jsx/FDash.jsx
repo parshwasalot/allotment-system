@@ -21,8 +21,14 @@ function FDash() {
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
-      setToken(storedToken);
-      window.history.replaceState("", "", '/FDash');
+      if (cat === 'F'){
+        setToken(storedToken);
+        window.history.replaceState("", "", '/FDash');
+      } else if (cat === 'A'){
+        navigate('/ADash');
+      } else {
+        navigate('/SDash');
+      }
     } else {
       navigate('/login');
     }

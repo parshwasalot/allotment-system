@@ -20,7 +20,14 @@ function SDash(){
     React.useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
-        setToken(storedToken);
+          if (cat === 'S'){
+            setToken(storedToken);
+            window.history.replaceState("", "", '/SDash');
+          } else if (cat === 'A'){
+            navigate('/ADash');
+          } else {
+            navigate('/FDash');
+          }
         } else {
         navigate('/login');
         }

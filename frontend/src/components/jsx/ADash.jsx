@@ -7,6 +7,7 @@ function ADash() {
   const navigate = useNavigate();
   const [token, setToken] = useState('');
   const name = localStorage.getItem('name');
+  const cat = localStorage.getItem('cat');
 
   useEffect(() => {
     document.body.classList.add('fdash-body');
@@ -19,8 +20,14 @@ function ADash() {
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
-      setToken(storedToken);
-      window.history.replaceState("", "", '/ADash');
+      if (cat === 'A'){
+        setToken(storedToken);
+        window.history.replaceState("", "", '/ADash');
+      } else if (cat === 'F'){
+        navigate('/FDash');
+      } else {
+        navigate('/SDash');
+      }
     } else {
       navigate('/login');
     }
