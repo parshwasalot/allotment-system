@@ -76,7 +76,7 @@ function Login() {
             <form onSubmit={submitValue}>
                 <label>
                     <input 
-                    id='login-inp'
+                    class='login-inp'
                         type="text" 
                         value={username} 
                         onChange={e => setUsername(e.target.value)}
@@ -86,7 +86,7 @@ function Login() {
                 </label><br />
                 <label>
                     <input 
-                    id='login-inp'
+                    class='login-inp'
                         type="password" 
                         value={password} 
                         onChange={e => setPassword(e.target.value)} 
