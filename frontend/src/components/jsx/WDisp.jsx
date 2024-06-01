@@ -29,7 +29,7 @@ function WaitlistDisplay() {
     }, []);
 
     const getData = () => {
-        axios.get("http://localhost:4000/waitlist/display")
+        axios.get("https://allotment-system.onrender.com/waitlist/display")
             .then(res => {
                 if (res.data.flag === 1) {
                     const sortedData = res.data.mydata.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -46,7 +46,7 @@ function WaitlistDisplay() {
     }
 
     const fetchAvailableHallsbool = (event) => {
-        axios.post("http://localhost:4000/halls/hallsyn", {
+        axios.post("https://allotment-system.onrender.com/halls/hallsyn", {
             date: event.date,
             stime: event.stime,
             etime: event.etime
@@ -69,7 +69,7 @@ function WaitlistDisplay() {
     }, [mydata]);
 
     const deleteData = (id) => {
-        axios.delete(`http://localhost:4000/waitlist/delete/${id}`)
+        axios.delete(`https://allotment-system.onrender.com/waitlist/delete/${id}`)
             .then((res) => {
                 alert(res.data.msg);
                 getData();
@@ -98,7 +98,7 @@ function WaitlistDisplay() {
         setPopupVisible(true);
 
         try {
-            const res = await axios.post('http://127.0.0.1:4000/halls/available-halls', {
+            const res = await axios.post('https://allotment-system.onrender.com/halls/available-halls', {
                 date: event.date,
                 stime: event.stime,
                 etime: event.etime
@@ -115,7 +115,7 @@ function WaitlistDisplay() {
             s_name: selectedSName
         };
 
-        axios.post("http://localhost:4000/event/register", eventData)
+        axios.post("https://allotment-system.onrender.com/event/register", eventData)
             .then(res => {
                 alert('Event booked successfully');
                 deleteData(selectedEvent._id);
