@@ -37,7 +37,7 @@ function FDisp(){
     },[])
 
     const getData = () => {
-        axios.get("http://localhost:4000/event/display")
+        axios.get("https://allotment-system.onrender.com/event/display")
             .then(res => {
                 console.log(res.data); 
                 // Sort the data by date in ascending order
@@ -50,7 +50,7 @@ function FDisp(){
     }
 
     const deleteData = (id) => {
-        axios.delete(`http://localhost:4000/event/delete/${id}`)
+        axios.delete(`https://allotment-system.onrender.com/event/delete/${id}`)
             .then((res) => {
                 console.log('successfully deleted!');
                 alert(res.data.msg);
