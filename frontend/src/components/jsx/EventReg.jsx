@@ -41,7 +41,7 @@ function Register() {
 
   const submitValue = (selectedSName) => {
     axios
-      .post("http://127.0.0.1:4000/event/register", {
+      .post("https://allotment-system.onrender.com/event/register", {
         name,
         desp,
         club,
@@ -72,7 +72,7 @@ function Register() {
 
   const waitlist = () => {
     axios
-      .post("http://127.0.0.1:4000/waitlist/register", {
+      .post("https://allotment-system.onrender.com/waitlist/register", {
         name,
         desp,
         club,
@@ -112,7 +112,7 @@ function Register() {
   const fetchAvailableHalls = async () => {
     try {
       const res = await axios.post(
-        "http://127.0.0.1:4000/halls/available-halls",
+        "https://allotment-system.onrender.com/halls/available-halls",
         {
           date,
           stime,
