@@ -59,6 +59,9 @@ function FDash() {
             <button id = "bt" className="nav-button" onClick={() => navigate('/EventReg')}>Register Event</button>
           </li>
           <li>
+            <button id = "bt" className="nav-button" onClick={() => navigate('/Ahall')}>Check Available Halls</button>
+          </li>
+          <li>
             <button id = "bt" className="nav-button" onClick={() => navigate('/FDisp')}>Display Events</button>
           </li>
           <li>
