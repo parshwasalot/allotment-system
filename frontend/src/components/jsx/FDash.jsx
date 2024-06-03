@@ -39,7 +39,7 @@ function FDash() {
   const handleLogout = async () => {
     try {
       const username = localStorage.getItem('username');
-      await axios.post('https://allotment-system.onrender.com/logout', { username });
+      await axios.post('https://allotment-system.onrender.com/logging/logout', { username });
 
       localStorage.removeItem('token');
       navigate('/login', { replace: true });
