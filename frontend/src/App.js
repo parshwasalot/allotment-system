@@ -12,6 +12,7 @@ import FDisp from './components/jsx/FDisp';
 import FUCP from './components/jsx/FUserChPass';
 import EventReg from './components/jsx/EventReg';
 import EventEdit from './components/jsx/EventEdit';
+import Ahall from './components/jsx/HallAvailable';
 import SDash from './components/jsx/SDash';
 import SDisp from './components/jsx/SDisp';
 import WDisp from './components/jsx/WDisp';
@@ -29,6 +30,7 @@ function App() {
           <Route path="/SDash" element={<ProtectedRoute element={SDash} />} />
           <Route path="/EventReg" element={<ProtectedRoute element={EventReg} />} />
           <Route path="/EventEdit/:id" element={<ProtectedRoute element={EventEdit} />} />
+          <Route path="/Ahall" element={<ProtectedRoute element={Ahall} />} />
           <Route path="/FDisp" element={<ProtectedRoute element={FDisp} />} />
           <Route path="/FUCP/:id" element={<ProtectedRoute element={FUCP} />} />
           <Route path="/SDisp" element={<ProtectedRoute element={SDisp} />} />
