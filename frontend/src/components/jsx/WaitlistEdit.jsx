@@ -55,7 +55,7 @@ function Edit() {
 
   const fetchAvailableHalls = async () => {
     try {
-      const res = await axios.post("https://allotment-system.onrender.com/halls/available-halls", {
+      const res = await axios.post("https://allotment-system-backend.vercel.app/halls/available-halls", {
         date,
         stime,
         etime,
@@ -143,7 +143,7 @@ function Edit() {
 
   const submitValue = (selectedHallName) => {
     axios
-      .post(`https://allotment-system.onrender.com/event/register`, {
+      .post(`https://allotment-system-backend.vercel.app/event/register`, {
         name,
         desp,
         club,
@@ -158,7 +158,7 @@ function Edit() {
           alert("Record Booked Successfully");
           // Hall booked successfully, now delete the waitlist entry
           axios
-            .delete(`http://localhost:4000/waitlist/delete/${id}`)
+            .delete(`https://allotment-system-backend.vercel.app/waitlist/delete/${id}`)
             .then((deleteRes) => {
               if (deleteRes.data.flag === 1) {
                 alert("Record Deleted Successfully");
@@ -179,7 +179,7 @@ function Edit() {
 
   const handleUpdate = () => {
     axios
-      .put(`https://allotment-system.onrender.com/waitlist/update/${id}`, {
+      .put(`https://allotment-system-backend.vercel.app/waitlist/update/${id}`, {
         name,
         desp,
         club,
@@ -192,6 +192,18 @@ function Edit() {
         console.log(res);
         if (res.data.flag === 1) {
           alert("Record Updated Successfully");
+  
+          // Log API call
+          axios.post('https://allotment-system-backend.vercel.app/logging/wedit', {
+            message: `Record with ID ${id} updated successfully`,
+          })
+          .then(logRes => {
+            console.log('Log entry created:', logRes);
+          })
+          .catch(logErr => {
+            console.error('Error logging update:', logErr);
+          });
+  
           navigate("/WDisp");
         } else {
           alert("Something went wrong");
@@ -199,6 +211,7 @@ function Edit() {
       })
       .catch((err) => console.log(err));
   };
+  
 
   React.useEffect(() => {
     getData();

@@ -37,7 +37,7 @@ function SDash(){
     const handleLogout = async () => {
       try {
         const username = localStorage.getItem('username');
-        await axios.post('https://allotment-system.onrender.com/logging/logout', { username });
+        await axios.post('https://allotment-system-backend.vercel.app/logging/logout', { username });
   
         localStorage.removeItem('token');
         navigate('/login', { replace: true });

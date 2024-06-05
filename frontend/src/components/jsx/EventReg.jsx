@@ -42,7 +42,7 @@ function Register() {
 
   const submitValue = (selectedSName) => {
     axios
-      .post("https://allotment-system.onrender.com/event/register", {
+      .post("https://allotment-system-backend.vercel.app/event/register", {
         name,
         desp,
         club,
@@ -58,29 +58,41 @@ function Register() {
         if (res.data.flag === 1) {
           alert("Record Successful");
           console.log(navigate);
-        
+  
+          // Log API call
+          axios.post('https://allotment-system-backend.vercel.app/logging/evereg', {
+            message: `Event registered successfully with name ${name}`,
+          })
+          .then(logRes => {
+            console.log('Log entry created:', logRes);
+          })
+          .catch(logErr => {
+            console.error('Error logging event registration:', logErr);
+          });
+  
           // Navigate based on the value of cat
           if (cat === 'A') {
             navigate("/ADash");
           } else if (cat === 'F') {
             navigate("/FDash");
           }
-        
+  
         } else {
           alert("Something went wrong");
         }
         setMessage(res.data.message);
         fetchAvailableHalls();
-        })
-        .catch((error) => {
-          alert("Error Occurred: " + error);
-          console.log(error);
-        });        
+      })
+      .catch((error) => {
+        alert("Error Occurred: " + error);
+        console.log(error);
+      });
   };
+  
 
   const waitlist = () => {
     axios
-      .post("https://allotment-system.onrender.com/waitlist/register", {
+      .post("https://allotment-system-backend.vercel.app/waitlist/register", {
         name,
         desp,
         club,
@@ -88,12 +100,24 @@ function Register() {
         stime,
         etime,
         username,
-        faclname,
       })
       .then((res) => {
         console.log(res);
         if (res.data.flag === 1) {
           alert("Joined the Waitlist!");
+  
+          // Log API call
+          axios.post('https://allotment-system-backend.vercel.app/logging/wreg', {
+            message: `User ${username} joined the waitlist successfully`,
+          })
+          .then(logRes => {
+            console.log('Log entry created:', logRes);
+          })
+          .catch(logErr => {
+            console.error('Error logging waitlist entry:', logErr);
+          });
+  
+          navigate("/WDisp");
         } else {
           alert("Something went wrong");
         }
@@ -120,7 +144,7 @@ function Register() {
   const fetchAvailableHalls = async () => {
     try {
       const res = await axios.post(
-        "https://allotment-system.onrender.com/halls/available-halls",
+        "https://allotment-system-backend.vercel.app/halls/available-halls",
         {
           date,
           stime,

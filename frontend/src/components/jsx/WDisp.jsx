@@ -29,7 +29,7 @@ function WaitlistDisplay() {
     }, []);
 
     const getData = () => {
-        axios.get("https://allotment-system.onrender.com/waitlist/display")
+        axios.get("https://allotment-system-backend.vercel.app/waitlist/display")
             .then(res => {
                 if (res.data.flag === 1) {
                     const sortedData = res.data.mydata.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -46,7 +46,7 @@ function WaitlistDisplay() {
     }
 
     const fetchAvailableHallsbool = (event) => {
-        axios.post("https://allotment-system.onrender.com/halls/hallsyn", {
+        axios.post("https://allotment-system-backend.vercel.app/halls/hallsyn", {
             date: event.date,
             stime: event.stime,
             etime: event.etime
@@ -69,15 +69,27 @@ function WaitlistDisplay() {
     }, [mydata]);
 
     const deleteData = (id) => {
-        axios.delete(`https://allotment-system.onrender.com/waitlist/delete/${id}`)
-            .then((res) => {
-                alert(res.data.msg);
-                getData();
-            }).catch(error => {
-                alert("Error Occurred: " + error);
-                console.log(error);
+        axios.delete(`https://allotment-system-backend.vercel.app/waitlist/delete/${id}`)
+          .then((res) => {
+            alert(res.data.msg);
+            getData();
+      
+            // Log API call
+            axios.post('https://allotment-system-backend.vercel.app/logging/wdel', {
+              message: `Waitlist record with ID ${id} deleted successfully`,
+            })
+            .then(logRes => {
+              console.log('Log entry created:', logRes);
+            })
+            .catch(logErr => {
+              console.error('Error logging waitlist deletion:', logErr);
             });
-    }
+          }).catch(error => {
+            alert("Error Occurred: " + error);
+            console.log(error);
+          });
+      }
+      
 
     const handleEdit = (id) => {
         navigate(`/WEdit/${id}`);
@@ -98,7 +110,7 @@ function WaitlistDisplay() {
         setPopupVisible(true);
 
         try {
-            const res = await axios.post('https://allotment-system.onrender.com/halls/available-halls', {
+            const res = await axios.post('https://allotment-system-backend.vercel.app/halls/available-halls', {
                 date: event.date,
                 stime: event.stime,
                 etime: event.etime
@@ -115,7 +127,7 @@ function WaitlistDisplay() {
             s_name: selectedSName
         };
 
-        axios.post("https://allotment-system.onrender.com/event/register", eventData)
+        axios.post("https://allotment-system-backend.vercel.app/event/register", eventData)
             .then(res => {
                 alert('Event booked successfully');
                 deleteData(selectedEvent._id);

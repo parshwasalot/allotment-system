@@ -32,7 +32,7 @@ function UserDisp() {
     }, []);
 
     const getData = () => {
-        axios.get("https://allotment-system.onrender.com/user/display")
+        axios.get("https://allotment-system-backend.vercel.app/user/display")
             .then(res => {
                 console.log(res.data); 
                 setData(res.data.mydata);
@@ -43,16 +43,28 @@ function UserDisp() {
     }
 
     const deleteData = (id) => {
-        axios.delete(`https://allotment-system.onrender.com/user/delete/${id}`)
-            .then((res) => {
-                console.log('Successfully deleted!');
-                alert(res.data.msg);
-                getData();
-            }).catch((error) => {
-                alert("Error Occurred: " + error);
-                console.log(error);
+        axios.delete(`https://allotment-system-backend.vercel.app/user/delete/${id}`)
+          .then((res) => {
+            console.log('Successfully deleted!');
+            alert(res.data.msg);
+            getData();
+      
+            // Log API call
+            axios.post('https://allotment-system-backend.vercel.app/logging/userdel', {
+              message: `User record with ID ${id} deleted successfully`,
+            })
+            .then(logRes => {
+              console.log('Log entry created:', logRes);
+            })
+            .catch(logErr => {
+              console.error('Error logging user deletion:', logErr);
             });
-    }
+          }).catch((error) => {
+            alert("Error Occurred: " + error);
+            console.log(error);
+          });
+      }
+      
 
     const handleEdit = (id) => {
         navigate(`/UserEdit/${id}`);

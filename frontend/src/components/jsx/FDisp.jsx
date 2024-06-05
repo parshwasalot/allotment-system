@@ -37,7 +37,7 @@ function FDisp(){
     },[])
 
     const getData = () => {
-        axios.get("https://allotment-system.onrender.com/event/display")
+        axios.get("https://allotment-system-backend.vercel.app/event/display")
             .then(res => {
                 console.log(res.data); 
                 // Sort the data by date in ascending order
@@ -50,16 +50,28 @@ function FDisp(){
     }
 
     const deleteData = (id) => {
-        axios.delete(`https://allotment-system.onrender.com/event/delete/${id}`)
-            .then((res) => {
-                console.log('successfully deleted!');
-                alert(res.data.msg);
-                getData();
-            }).catch((error) => {
-                alert("Error Occurred: " + error);
-                console.log(error);
+        axios.delete(`https://allotment-system-backend.vercel.app/event/delete/${id}`)
+          .then((res) => {
+            console.log('successfully deleted!');
+            alert(res.data.msg);
+            getData();
+      
+            // Log API call
+            axios.post('https://allotment-system-backend.vercel.app/logging/evedel', {
+              message: `Event record with ID ${id} deleted successfully`,
+            })
+            .then(logRes => {
+              console.log('Log entry created:', logRes);
+            })
+            .catch(logErr => {
+              console.error('Error logging event deletion:', logErr);
             });
-    }
+          }).catch((error) => {
+            alert("Error Occurred: " + error);
+            console.log(error);
+          });
+      }
+      
 
     const handleEdit = (id) => {
         navigate(`/EventEdit/${id}`);

@@ -31,30 +31,42 @@ const ChangePasswordWithOldPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (formData.newPassword !== formData.confirmNewPassword) {
       alert("New passwords do not match");
       return;
     }
-
+  
     if (formData.oldPassword !== storedOldPassword) {
       alert("Old password is incorrect");
       return;
     }
-
+  
     try {
       const hashedPassword = await bcryptjs.hash(formData.newPassword, 10);
       console.log(id);
       const payload = {
         newPassword: hashedPassword,
       };
-
+  
       const passwordResponse = await axios.post(
-        `https://allotment-system.onrender.com/user/changePassword/${id}`,
+        `https://allotment-system-backend.vercel.app/user/changePassword/${id}`,
         payload
       );
-
+  
       if (passwordResponse.data.success) {
         alert("Password changed successfully");
+  
+        // Log API call
+        try {
+          await axios.post('https://allotment-system-backend.vercel.app/logging/fuschpass', {
+            message: `Password for user ID ${id} changed successfully`,
+          });
+          console.log('Log entry created for password change');
+        } catch (logError) {
+          console.error('Error logging password change:', logError);
+        }
+  
         navigate("/FDash");
       } else {
         alert(passwordResponse.data.msg || "Password change failed");
@@ -64,6 +76,7 @@ const ChangePasswordWithOldPassword = () => {
       alert("Password change failed");
     }
   };
+  
 
   return (
     <div className="register-body">

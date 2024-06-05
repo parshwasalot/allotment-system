@@ -55,7 +55,7 @@ function Edit() {
 
   const fetchAvailableHalls = async () => {
     try {
-      const res = await axios.post("https://allotment-system.onrender.com/halls/available-halls", {
+      const res = await axios.post("https://allotment-system-backend.vercel.app/halls/available-halls", {
         date,
         stime,
         etime,
@@ -143,7 +143,7 @@ function Edit() {
 
   const submitValue = (selectedHallName) => {
     axios
-      .put(`https://allotment-system.onrender.com/event/update/${id}`, {
+      .put(`https://allotment-system-backend.vercel.app/event/update/${id}`, {
         name,
         desp,
         club,
@@ -157,6 +157,18 @@ function Edit() {
         console.log(res);
         if (res.data.flag === 1) {
           alert("Record Updated Successfully");
+  
+          // Log API call
+          axios.post('https://allotment-system-backend.vercel.app/logging/eveedit', {
+            message: `Event record with ID ${id} updated successfully`,
+          })
+          .then(logRes => {
+            console.log('Log entry created:', logRes);
+          })
+          .catch(logErr => {
+            console.error('Error logging update:', logErr);
+          });
+  
           navigate("/FDisp");
         } else {
           alert("Something went wrong");
@@ -164,10 +176,11 @@ function Edit() {
       })
       .catch((err) => console.log(err));
   };
+  
 
   const waitlist = () => {
     axios
-      .post("https://allotment-system.onrender.com/waitlist/register", {
+      .post("https://allotment-system-backend.vercel.app/waitlist/register", {
         name,
         desp,
         club,
@@ -180,6 +193,18 @@ function Edit() {
         console.log(res);
         if (res.data.flag === 1) {
           alert("Joined the Waitlist!");
+  
+          // Log API call
+          axios.post('https://allotment-system-backend.vercel.app/logging/wreg', {
+            message: `User ${username} joined the waitlist successfully`,
+          })
+          .then(logRes => {
+            console.log('Log entry created:', logRes);
+          })
+          .catch(logErr => {
+            console.error('Error logging waitlist entry:', logErr);
+          });
+  
           navigate("/WDisp");
         } else {
           alert("Something went wrong");
@@ -191,10 +216,11 @@ function Edit() {
         console.log(error);
       });
   };
+  
 
   const handleUpdate = () => {
     axios
-      .put(`https://allotment-system.onrender.com/event/update/${id}`, {
+      .put(`https://allotment-system-backend.vercel.app/event/update/${id}`, {
         name,
         desp,
         club,
@@ -207,6 +233,18 @@ function Edit() {
         console.log(res);
         if (res.data.flag === 1) {
           alert("Record Updated Successfully");
+  
+          // Log API call
+          axios.post('https://allotment-system-backend.vercel.app/logging/peveedit', {
+            message: `Event record with ID ${id} updated successfully`,
+          })
+          .then(logRes => {
+            console.log('Log entry created:', logRes);
+          })
+          .catch(logErr => {
+            console.error('Error logging update:', logErr);
+          });
+  
           navigate("/FDisp");
         } else {
           alert("Something went wrong");
@@ -214,6 +252,7 @@ function Edit() {
       })
       .catch((err) => console.log(err));
   };
+  
 
   React.useEffect(() => {
     getData();
@@ -222,7 +261,7 @@ function Edit() {
   const getData = () => {
     console.log(id);
     axios
-      .get(`https://allotment-system.onrender.com/event/edit/${id}`)
+      .get(`https://allotment-system-backend.vercel.app/event/edit/${id}`)
       .then((res) => {
         console.log(res.data);
         setName(res.data.mydata.name);

@@ -29,7 +29,7 @@ const EditUser = () => {
 
   const getData = () => {
     axios
-      .get(`https://allotment-system.onrender.com/user/edit/${id}`)
+      .get(`https://allotment-system-backend.vercel.app/user/edit/${id}`)
       .then((response) => {
         const user = response.data;
         setName(user.mydata.name);
@@ -64,22 +64,34 @@ const EditUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      await axios.put(`https://allotment-system.onrender.com/user/update/${id}`, {
+      await axios.put(`https://allotment-system-backend.vercel.app/user/update/${id}`, {
         username,
         name,
         mobile,
         cat,
       });
-
+  
       alert("User details updated successfully");
+  
+      // Log API call
+      try {
+        await axios.post('https://allotment-system-backend.vercel.app/logging/uedit', {
+          message: `User details for user ID ${id} updated successfully`,
+        });
+        console.log('Log entry created for user details update');
+      } catch (logError) {
+        console.error('Error logging user details update:', logError);
+      }
+  
       navigate("/ADash");
     } catch (error) {
       console.error("There was an error updating the user!", error);
       alert("Update failed");
     }
   };
+  
 
   return (
     <div className="register-body">

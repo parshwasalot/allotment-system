@@ -41,7 +41,7 @@ function Ahall() {
 
   const fetchAvailableHalls = async () => {
     try {
-      const res = await axios.post("http://127.0.0.1:4000/halls/available-halls", {
+      const res = await axios.post("https://allotment-system-backend.vercel.app/halls/available-halls", {
         date,
         stime,
         etime,

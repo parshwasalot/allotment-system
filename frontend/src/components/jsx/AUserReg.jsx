@@ -78,21 +78,32 @@ const RegisterUser = () => {
 
     try {
       const hashedPassword = await bcryptjs.hash(formData.password, 10);
-
-      const response = await axios.post("https://allotment-system.onrender.com/user/register", {
+    
+      const response = await axios.post("https://allotment-system-backend.vercel.app/user/register", {
         username: formData.username,
         name: formData.name,
         mobile: formData.mobile,
         cat: formData.cat,
         password: hashedPassword,
       });
+    
       alert("User registered successfully");
       navigate('/ADash');
       console.log(response.data);
+    
+      // Log API call
+      try {
+        await axios.post('https://allotment-system-backend.vercel.app/logging/userreg', {
+          message: `User registered successfully with username ${formData.username}`,
+        });
+        console.log('Log entry created for user registration');
+      } catch (logError) {
+        console.error('Error logging user registration:', logError);
+      }
     } catch (error) {
       console.error("There was an error registering the user!", error);
       alert("Registration failed");
-    }
+    }    
   };
 
   return (

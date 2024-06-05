@@ -26,7 +26,7 @@ function Display() {
     }, [navigate]);
 
     const getData = () => {
-        axios.get("https://allotment-system.onrender.com/event/display")
+        axios.get("https://allotment-system-backend.vercel.app/event/display")
             .then(res => {
                 console.log(res.data);
                 // Sort the data by date in ascending order
