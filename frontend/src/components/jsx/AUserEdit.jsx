@@ -77,9 +77,8 @@ const EditUser = () => {
   
       // Log API call
       try {
-        await axios.post('https://allotment-system-backend.vercel.app/logging/uedit', {
-          message: `User details for user ID ${id} updated successfully`,
-        });
+        const username = localStorage.getItem('username');
+        await axios.post('https://allotment-system-backend.vercel.app/logging/uedit',{username});
         console.log('Log entry created for user details update');
       } catch (logError) {
         console.error('Error logging user details update:', logError);

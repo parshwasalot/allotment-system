@@ -60,9 +60,8 @@ function Register() {
           console.log(navigate);
   
           // Log API call
-          axios.post('https://allotment-system-backend.vercel.app/logging/evereg', {
-            message: `Event registered successfully with name ${name}`,
-          })
+          const username = localStorage.getItem('username');
+          axios.post('https://allotment-system-backend.vercel.app/logging/evereg',{username})
           .then(logRes => {
             console.log('Log entry created:', logRes);
           })

@@ -159,9 +159,8 @@ function Edit() {
           alert("Record Updated Successfully");
   
           // Log API call
-          axios.post('https://allotment-system-backend.vercel.app/logging/eveedit', {
-            message: `Event record with ID ${id} updated successfully`,
-          })
+          const username = localStorage.getItem('username');
+          axios.post('https://allotment-system-backend.vercel.app/logging/eveedit',{username})
           .then(logRes => {
             console.log('Log entry created:', logRes);
           })
@@ -195,9 +194,8 @@ function Edit() {
           alert("Joined the Waitlist!");
   
           // Log API call
-          axios.post('https://allotment-system-backend.vercel.app/logging/wreg', {
-            message: `User ${username} joined the waitlist successfully`,
-          })
+          const username = localStorage.getItem('username');
+          axios.post('https://allotment-system-backend.vercel.app/logging/wreg',{username})
           .then(logRes => {
             console.log('Log entry created:', logRes);
           })
@@ -235,9 +233,8 @@ function Edit() {
           alert("Record Updated Successfully");
   
           // Log API call
-          axios.post('https://allotment-system-backend.vercel.app/logging/peveedit', {
-            message: `Event record with ID ${id} updated successfully`,
-          })
+          const username = localStorage.getItem('username');
+          axios.post('https://allotment-system-backend.vercel.app/logging/peveedit',{username})
           .then(logRes => {
             console.log('Log entry created:', logRes);
           })

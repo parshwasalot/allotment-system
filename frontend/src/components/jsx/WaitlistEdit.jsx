@@ -157,6 +157,17 @@ function Edit() {
         if (res.data.flag === 1) {
           alert("Record Booked Successfully");
           // Hall booked successfully, now delete the waitlist entry
+
+          // Log API call
+          const username = localStorage.getItem('username');
+          axios.post('https://allotment-system-backend.vercel.app/logging/evereg',{username})
+          .then(logRes => {
+            console.log('Log entry created:', logRes);
+          })
+          .catch(logErr => {
+            console.error('Error logging event registration:', logErr);
+          });
+
           axios
             .delete(`https://allotment-system-backend.vercel.app/waitlist/delete/${id}`)
             .then((deleteRes) => {
@@ -194,9 +205,7 @@ function Edit() {
           alert("Record Updated Successfully");
   
           // Log API call
-          axios.post('https://allotment-system-backend.vercel.app/logging/wedit', {
-            message: `Record with ID ${id} updated successfully`,
-          })
+          axios.post('https://allotment-system-backend.vercel.app/logging/wedit',{username})
           .then(logRes => {
             console.log('Log entry created:', logRes);
           })

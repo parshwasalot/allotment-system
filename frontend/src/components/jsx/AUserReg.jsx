@@ -93,9 +93,8 @@ const RegisterUser = () => {
     
       // Log API call
       try {
-        await axios.post('https://allotment-system-backend.vercel.app/logging/userreg', {
-          message: `User registered successfully with username ${formData.username}`,
-        });
+        const username = localStorage.getItem('username');
+        await axios.post('https://allotment-system-backend.vercel.app/logging/userreg',{username});
         console.log('Log entry created for user registration');
       } catch (logError) {
         console.error('Error logging user registration:', logError);

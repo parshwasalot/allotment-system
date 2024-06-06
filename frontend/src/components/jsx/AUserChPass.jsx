@@ -52,9 +52,8 @@ const ChangePassword = () => {
   
         // Log API call
         try {
-          await axios.post('https://allotment-system-backend.vercel.app/logging/auschpass', {
-            message: `Password for user ID ${id} changed successfully`,
-          });
+          const username = localStorage.getItem('username');
+          await axios.post('https://allotment-system-backend.vercel.app/logging/auschpass', { username });
           console.log('Log entry created for password change');
         } catch (logError) {
           console.error('Error logging password change:', logError);

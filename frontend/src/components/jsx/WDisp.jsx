@@ -75,9 +75,8 @@ function WaitlistDisplay() {
             getData();
       
             // Log API call
-            axios.post('https://allotment-system-backend.vercel.app/logging/wdel', {
-              message: `Waitlist record with ID ${id} deleted successfully`,
-            })
+            const username = localStorage.getItem('username');
+            axios.post('https://allotment-system-backend.vercel.app/logging/wdel',{username})
             .then(logRes => {
               console.log('Log entry created:', logRes);
             })

@@ -57,9 +57,8 @@ function FDisp(){
             getData();
       
             // Log API call
-            axios.post('https://allotment-system-backend.vercel.app/logging/evedel', {
-              message: `Event record with ID ${id} deleted successfully`,
-            })
+            const username = localStorage.getItem('username');
+            axios.post('https://allotment-system-backend.vercel.app/logging/evedel',{username})
             .then(logRes => {
               console.log('Log entry created:', logRes);
             })

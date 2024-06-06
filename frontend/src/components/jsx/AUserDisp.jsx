@@ -50,9 +50,8 @@ function UserDisp() {
             getData();
       
             // Log API call
-            axios.post('https://allotment-system-backend.vercel.app/logging/userdel', {
-              message: `User record with ID ${id} deleted successfully`,
-            })
+            const username = localStorage.getItem('username');
+            axios.post('https://allotment-system-backend.vercel.app/logging/userdel', { username })
             .then(logRes => {
               console.log('Log entry created:', logRes);
             })
