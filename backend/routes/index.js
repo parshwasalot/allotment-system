@@ -1,15 +1,39 @@
 const express = require('express');
+const validator = require('validator');
+const sanitizeHtml = require('sanitize-html');
 const router = express.Router();
 const UserModel = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+// Helper function to sanitize input
+function sanitizeInput(data) {
+    const sanitizedData = {};
+    for (const key in data) {
+        if (typeof data[key] === 'string') {
+            sanitizedData[key] = sanitizeHtml(data[key], {
+                allowedTags: [],
+                allowedAttributes: {}
+            }).trim();
+        } else {
+            sanitizedData[key] = data[key];
+        }
+    }
+    return sanitizedData;
+}
+
 // Login API
 router.post('/login', (req, res) => {
-    const { username, password } = req.body;
+    const sanitizedData = sanitizeInput(req.body);
+    const { username, password } = sanitizedData;
 
     if (!username || !password) {
         return res.status(400).json({ flag: 0, message: "Username and password are required" });
+    }
+
+    // Validate the sanitized input
+    if (!validator.isAlphanumeric(username) || !validator.isLength(username, { min: 3, max: 30 })) {
+        return res.status(400).json({ flag: 0, message: "Invalid username format" });
     }
 
     UserModel.findOne({ username: username })

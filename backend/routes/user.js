@@ -1,82 +1,124 @@
-const express = require('express')
+const express = require('express');
+const validator = require('validator');
+const sanitizeHtml = require('sanitize-html');
 const router = express.Router();
 
 const users = require('../models/user');
 
-//user register
+// Helper function to sanitize input
+function sanitizeInput(data) {
+    const sanitizedData = {};
+    for (const key in data) {
+        if (typeof data[key] === 'string') {
+            sanitizedData[key] = sanitizeHtml(data[key], {
+                allowedTags: [],
+                allowedAttributes: {}
+            }).trim();
+        } else {
+            sanitizedData[key] = data[key];
+        }
+    }
+    return sanitizedData;
+}
+
+// User register
 router.post('/register', (req, res) => {
-    users.create(req.body)
-    .then(data => res.json({flag:1,msg:'success',mydata:data}))
-    .catch(err => console.error(err));
+    const sanitizedData = sanitizeInput(req.body);
+
+    // Additional validation for required fields can be added here
+    users.create(sanitizedData)
+        .then(data => res.json({flag:1,msg:'success',mydata:data}))
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({flag:0,msg:'Error occurred',error:err.message});
+        });
 });
 
-//user display
+// User display
 router.get('/display', (req, res) => {
     users.find()
-    .then(data => {
-      if(data.length > 0) {
-        res.json({flag:1,msg:'success',mydata:data});
-      }else{
-        res.json({flag:0,msg:'No Record Found'})
-      }
-    })
-    .catch(err => console.error(err));
-  });
+        .then(data => {
+            if(data.length > 0) {
+                res.json({flag:1,msg:'success',mydata:data});
+            } else {
+                res.json({flag:0,msg:'No Record Found'});
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({flag:0,msg:'Error occurred',error:err.message});
+        });
+});
 
-  //user delete
-  router.delete('/delete/:id', (req, res) => {
-    users.findByIdAndDelete(req.params.id)
-      .then(data => {
-        if (!data) {
-          console.log(data);
-          return res.status(404).json({ flag: 0, msg: 'Record not found' })
-        }
-        res.json({ flag: 1, msg: 'Record deleted' });
-      })
-      .catch(err => {
-        console.error(err);
-        res.status(500).json({ flag: 0, msg: 'Error occurred', error: err.message });
-      });
-  });
+// User delete
+router.delete('/delete/:id', (req, res) => {
+    const sanitizedId = validator.escape(req.params.id);
+    users.findByIdAndDelete(sanitizedId)
+        .then(data => {
+            if (!data) {
+                return res.status(404).json({flag:0,msg:'Record not found'});
+            }
+            res.json({flag:1,msg:'Record deleted'});
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({flag:0,msg:'Error occurred',error:err.message});
+        });
+});
 
-//Edit API
+// Edit API
 router.get('/edit/:id', (req, res) => {
-    users.findById(req.params.id)
-    .then(data => {
-      console.log(data);
-      res.json({flag:1,msg:'Record found',mydata:data})
-    })
-    .catch(err => console.error(err));
-  });
-  
-  //Update
-  router.put('/update/:id', (req, res) => {
-    users.findByIdAndUpdate(req.params.id, req.body)
-    .then(data => {
-      console.log(data);
-      res.json({flag:1,msg:'Record Updated',mydata:data})
-    })
-    .catch(err => console.error(err));
-  });
+    const sanitizedId = validator.escape(req.params.id);
+    users.findById(sanitizedId)
+        .then(data => {
+            if (!data) {
+                return res.status(404).json({flag:0,msg:'Record not found'});
+            }
+            res.json({flag:1,msg:'Record found',mydata:data});
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({flag:0,msg:'Error occurred',error:err.message});
+        });
+});
 
-  //Admin Change Password
-  router.post('/changePassword/:id', async (req, res) => {
-    const { id } = req.params;
-    const { newPassword } = req.body;
-  
+// Update
+router.put('/update/:id', (req, res) => {
+    const sanitizedId = validator.escape(req.params.id);
+    const sanitizedData = sanitizeInput(req.body);
+
+    users.findByIdAndUpdate(sanitizedId, sanitizedData, { new: true })
+        .then(data => {
+            if (!data) {
+                return res.status(404).json({flag:0,msg:'Record not found'});
+            }
+            res.json({flag:1,msg:'Record updated',mydata:data});
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({flag:0,msg:'Error occurred',error:err.message});
+        });
+});
+
+// Admin Change Password
+router.post('/changePassword/:id', async (req, res) => {
+    const sanitizedId = validator.escape(req.params.id);
+    const { newPassword } = sanitizeInput(req.body);
+
     try {
-      const user = await users.findById(id);
-      if (!user) {
-        return res.status(404).json({ msg: 'User not found' });
-      }
-  
-      user.password = newPassword;
-      await user.save();
-  
-      res.json({ success: true, msg: 'Password changed successfully' });
+        const user = await users.findById(sanitizedId);
+        if (!user) {
+            return res.status(404).json({msg:'User not found'});
+        }
+
+        user.password = newPassword; // In real applications, remember to hash the password before saving
+        await user.save();
+
+        res.json({success:true,msg:'Password changed successfully'});
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ msg: 'Server error' });
+        console.error(error);
+        res.status(500).json({msg:'Server error'});
     }
-  });  
+});
+
 module.exports = router;
