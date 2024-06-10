@@ -150,31 +150,31 @@ const RegisterUser = () => {
             <div>
               <input
                 type="radio"
-                id="S"
+                id="Student"
                 name="cat"
-                value="S"
-                checked={formData.cat === "S"}
+                value="Student"
+                checked={formData.cat === "Student"}
                 onChange={handleChange}
               />
-              <label htmlFor="S">Student</label>
+              <label htmlFor="Student">Student</label>
               <input
                 type="radio"
-                id="F"
+                id="Faculty"
                 name="cat"
-                value="F"
-                checked={formData.cat === "F"}
+                value="Faculty"
+                checked={formData.cat === "Faculty"}
                 onChange={handleChange}
               />
-              <label htmlFor="F">Faculty</label>
+              <label htmlFor="Faculty">Faculty</label>
               <input
                 type="radio"
-                id="A"
+                id="Admin"
                 name="cat"
-                value="A"
-                checked={formData.cat === "A"}
+                value="Admin"
+                checked={formData.cat === "Admin"}
                 onChange={handleChange}
               />
-              <label htmlFor="A">Admin</label>
+              <label htmlFor="Admin">Admin</label>
             </div>
 
             <label htmlFor="password">Password:</label>
