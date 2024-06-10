@@ -38,8 +38,8 @@ const RegisterUser = () => {
       delete newErrors.username;
     }
 
-    if (name === "password" && value.length > 6) {
-      newErrors.password = "Password must be no more than 6 characters";
+    if (name === "password" && value.length > 15 && value.length < 8) {
+      newErrors.password = "Password must be between 8 to 15 characters";
     } else {
       delete newErrors.password;
     }
