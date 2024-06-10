@@ -32,16 +32,20 @@ const RegisterUser = () => {
     const { name, value } = e.target;
     let newErrors = { ...errors };
 
-    if (name === "username" && value.length > 8) {
-      newErrors.username = "Username must be no more than 8 characters";
-    } else {
-      delete newErrors.username;
+    if (name === "username") {
+      if (value.length < 6 || value.length > 15) {
+        newErrors.username = "Username must be between 6 and 15 characters";
+      } else {
+        delete newErrors.username;
+      }
     }
 
-    if (name === "password" && value.length > 15 && value.length < 8) {
-      newErrors.password = "Password must be between 8 to 15 characters";
-    } else {
-      delete newErrors.password;
+    if (name === "password") {
+      if (value.length < 8 || value.length > 15) {
+        newErrors.password = "Password must be between 8 and 15 characters";
+      } else {
+        delete newErrors.password;
+      }
     }
 
     setFormData({
@@ -55,18 +59,18 @@ const RegisterUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password.length > 6) {
+    if (formData.username.length < 6 || formData.username.length > 15) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        password: "Password must be no more than 6 characters",
+        username: "Username must be between 6 and 15 characters",
       }));
       return;
     }
 
-    if (formData.username.length > 8) {
+    if (formData.password.length < 8 || formData.password.length > 15) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        username: "Username must be no more than 8 characters",
+        password: "Password must be between 8 and 15 characters",
       }));
       return;
     }
@@ -78,7 +82,7 @@ const RegisterUser = () => {
 
     try {
       const hashedPassword = await bcryptjs.hash(formData.password, 10);
-    
+
       const response = await axios.post("https://allotment-system-backend.vercel.app/user/register", {
         username: formData.username,
         name: formData.name,
@@ -86,11 +90,11 @@ const RegisterUser = () => {
         cat: formData.cat,
         password: hashedPassword,
       });
-    
+
       alert("User registered successfully");
       navigate('/ADash');
       console.log(response.data);
-    
+
       // Log API call
       try {
         const username = localStorage.getItem('username');
@@ -102,7 +106,7 @@ const RegisterUser = () => {
     } catch (error) {
       console.error("There was an error registering the user!", error);
       alert("Registration failed");
-    }    
+    }
   };
 
   return (
