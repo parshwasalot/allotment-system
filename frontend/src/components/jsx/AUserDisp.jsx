@@ -74,7 +74,12 @@ function UserDisp() {
     };
 
     const handleNameSearchChange = (e) => {
-        setNameSearch(e.target.value);
+        const value = e.target.value;
+        if (value.length <= 15) {
+            setNameSearch(value);
+        } else {
+            alert("Name search input must be 15 characters or less.");
+        }
     };
 
     const handleCategorySearchChange = (e) => {
@@ -96,12 +101,15 @@ function UserDisp() {
                     value={nameSearch}
                     onChange={handleNameSearchChange}
                 />
-                <input 
-                    type="text" 
-                    placeholder="Search by category" 
+                <select 
                     value={categorySearch}
                     onChange={handleCategorySearchChange}
-                />
+                >
+                    <option value="">Select Category</option>
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                    <option value="admin">Admin</option>
+                </select>
             </div>
             <table border='1'>
                 <thead>
