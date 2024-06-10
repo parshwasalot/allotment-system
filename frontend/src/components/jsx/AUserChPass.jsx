@@ -29,27 +29,34 @@ const ChangePassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (formData.newPassword !== formData.confirmNewPassword) {
+    
+    const { newPassword, confirmNewPassword } = formData;
+
+    if (newPassword !== confirmNewPassword) {
       alert("New passwords do not match");
       return;
     }
-  
+
+    if (newPassword.length < 8 || newPassword.length > 15) {
+      alert("Password must be between 8 and 15 characters long");
+      return;
+    }
+
     try {
-      const hashedPassword = await bcrypt.hash(formData.newPassword, 10); // 10 is the salt rounds
-  
+      const hashedPassword = await bcrypt.hash(newPassword, 10); // 10 is the salt rounds
+
       const payload = {
         newPassword: hashedPassword,
       };
-  
+
       const passwordResponse = await axios.post(
         `https://allotment-system-backend.vercel.app/user/changePassword/${id}`,
         payload
       );
-  
+
       if (passwordResponse.data.success) {
         alert("Password changed successfully");
-  
+
         // Log API call
         try {
           const username = localStorage.getItem('username');
@@ -58,7 +65,7 @@ const ChangePassword = () => {
         } catch (logError) {
           console.error('Error logging password change:', logError);
         }
-  
+
         navigate("/ADash");
       } else {
         alert(passwordResponse.data.msg || "Password change failed");
@@ -68,8 +75,6 @@ const ChangePassword = () => {
       alert("Password change failed");
     }
   };
-  
-  
 
   return (
     <div className="register-body">
