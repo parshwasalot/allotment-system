@@ -65,6 +65,11 @@ const EditUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    if (name.length < 6 || name.length > 15) {
+      alert("Name must be between 6 and 15 characters long");
+      return;
+    }
+
     try {
       await axios.put(`https://allotment-system-backend.vercel.app/user/update/${id}`, {
         username,
@@ -90,7 +95,6 @@ const EditUser = () => {
       alert("Update failed");
     }
   };
-  
 
   return (
     <div className="register-body">
@@ -132,31 +136,31 @@ const EditUser = () => {
             <div>
               <input
                 type="radio"
-                id="S"
+                id="student"
                 name="cat"
-                value="S"
-                checked={cat === "S"}
+                value="student"
+                checked={cat === "student"}
                 onChange={handleChange}
               />
-              <label htmlFor="S">S</label>
+              <label htmlFor="student">Student</label>
               <input
                 type="radio"
-                id="F"
+                id="faculty"
                 name="cat"
-                value="F"
-                checked={cat === "F"}
+                value="faculty"
+                checked={cat === "faculty"}
                 onChange={handleChange}
               />
-              <label htmlFor="F">F</label>
+              <label htmlFor="faculty">Faculty</label>
               <input
                 type="radio"
-                id="A"
+                id="admin"
                 name="cat"
-                value="A"
-                checked={cat === "A"}
+                value="admin"
+                checked={cat === "admin"}
                 onChange={handleChange}
               />
-              <label htmlFor="A">A</label>
+              <label htmlFor="admin">Admin</label>
             </div>
 
             <div className="book-button-container">
