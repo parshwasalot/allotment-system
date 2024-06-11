@@ -10,8 +10,6 @@ function FDash() {
   const id = localStorage.getItem('userid');
   const cat = localStorage.getItem('cat');
 
-  console.log(id);
-
   useEffect(() => {
     document.body.classList.add('fdash-body');
     

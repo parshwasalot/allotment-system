@@ -16,6 +16,7 @@ function Register() {
   const [inputsDisabled, setInputsDisabled] = React.useState(false);
   const [bookButtonsDisabled, setBookButtonsDisabled] = React.useState(true);
   const [errors, setErrors] = React.useState({});
+  const [isFormComplete, setIsFormComplete] = React.useState(false);
   const navigate = useNavigate();
   const [token, setToken] = React.useState("");
   const username = localStorage.getItem("username");
@@ -31,7 +32,6 @@ function Register() {
   }, []);
 
   React.useEffect(() => {
-    console.log(username);
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
@@ -39,6 +39,18 @@ function Register() {
       navigate("/login");
     }
   }, [navigate, username]);
+
+  React.useEffect(() => {
+    checkFormCompletion();
+  }, [name, desp, club, date, stime, etime]);
+
+  const checkFormCompletion = () => {
+    if (name && desp && club && date && stime && etime) {
+      setIsFormComplete(true);
+    } else {
+      setIsFormComplete(false);
+    }
+  };
 
   const submitValue = (selectedSName) => {
     axios
@@ -333,7 +345,11 @@ function Register() {
               </tr>
             </tbody>
           </table>
-          <button className="book-button" onClick={handleCheckAvailability}>
+          <button
+            className="book-button"
+            onClick={handleCheckAvailability}
+            disabled={!isFormComplete}
+          >
             Check Availability
           </button>
         </form>
