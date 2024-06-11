@@ -20,6 +20,7 @@ function Edit() {
   const [inputsDisabled, setInputsDisabled] = React.useState(false);
   const [bookButtonsDisabled, setBookButtonsDisabled] = React.useState(true);
   const [errors, setErrors] = React.useState({});
+  const [isFormComplete, setIsFormComplete] = React.useState(false);
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
   let { id } = useParams();
@@ -40,6 +41,18 @@ function Edit() {
       navigate("/");
     }
   }, [navigate]);
+
+  React.useEffect(() => {
+    checkFormCompletion();
+  }, [name, desp, club, date, stime, etime]);
+
+  const checkFormCompletion = () => {
+    if (name && desp && club && date && stime && etime) {
+      setIsFormComplete(true);
+    } else {
+      setIsFormComplete(false);
+    }
+  };
 
   const handleCheckAvailability = (event) => {
     event.preventDefault();
@@ -175,7 +188,6 @@ function Edit() {
       })
       .catch((err) => console.log(err));
   };
-  
 
   const waitlist = () => {
     axios
@@ -214,7 +226,6 @@ function Edit() {
         console.log(error);
       });
   };
-  
 
   const handleUpdate = () => {
     axios
@@ -249,7 +260,6 @@ function Edit() {
       })
       .catch((err) => console.log(err));
   };
-  
 
   React.useEffect(() => {
     getData();
@@ -380,11 +390,19 @@ function Edit() {
               </tr>
             </tbody>
           </table>
-          <button className="book-button" onClick={handleCheckAvailability}>
+          <button
+            className="book-button"
+            onClick={handleCheckAvailability}
+            disabled={!isFormComplete}
+          >
             Check Availability
           </button>
           {(date === originalDate && stime === originalStime && etime === originalEtime) && (
-            <button className="book-button" onClick={handleUpdate}>
+            <button
+              className="book-button"
+              onClick={handleUpdate}
+              disabled={!isFormComplete}
+            >
               Update
             </button>
           )}

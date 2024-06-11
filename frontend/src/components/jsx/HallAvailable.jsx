@@ -9,6 +9,7 @@ function Ahall() {
   const [etime, setEtime] = React.useState("");
   const [availableHalls, setAvailableHalls] = React.useState([]);
   const [availabilityChecked, setAvailabilityChecked] = React.useState(false);
+  const [isFormComplete, setIsFormComplete] = React.useState(false);
   const navigate = useNavigate();
   const [token, setToken] = React.useState("");
 
@@ -28,6 +29,18 @@ function Ahall() {
       navigate("/");
     }
   }, [navigate]);
+
+  React.useEffect(() => {
+    checkFormCompletion();
+  }, [date, stime, etime]);
+
+  const checkFormCompletion = () => {
+    if (date && stime && etime) {
+      setIsFormComplete(true);
+    } else {
+      setIsFormComplete(false);
+    }
+  };
 
   const handleCheckAvailability = async (event) => {
     event.preventDefault();
@@ -130,7 +143,11 @@ function Ahall() {
               </tr>
             </tbody>
           </table>
-          <button className="book-button" onClick={handleCheckAvailability}>
+          <button
+            className="book-button"
+            onClick={handleCheckAvailability}
+            disabled={!isFormComplete}
+          >
             Check Availability
           </button>
         </form>

@@ -20,6 +20,7 @@ function Edit() {
   const [inputsDisabled, setInputsDisabled] = React.useState(false);
   const [bookButtonsDisabled, setBookButtonsDisabled] = React.useState(true);
   const [errors, setErrors] = React.useState({});
+  const [isFormComplete, setIsFormComplete] = React.useState(false); // New state variable
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
   let { id } = useParams();
@@ -40,6 +41,18 @@ function Edit() {
       navigate("/");
     }
   }, [navigate]);
+
+  React.useEffect(() => {
+    checkFormCompletion(); // Check form completion whenever fields change
+  }, [name, desp, club, date, stime, etime]);
+
+  const checkFormCompletion = () => {
+    if (name && desp && club && date && stime && etime) {
+      setIsFormComplete(true);
+    } else {
+      setIsFormComplete(false);
+    }
+  };
 
   const handleCheckAvailability = (event) => {
     event.preventDefault();
@@ -356,7 +369,7 @@ function Edit() {
               Update
             </button>
           ) : (
-            <button className="book-button" onClick={handleCheckAvailability}>
+            <button className="book-button" onClick={handleCheckAvailability} disabled={!isFormComplete}>
               Check Availability
             </button>
           )}
