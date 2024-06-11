@@ -68,8 +68,9 @@ router.delete('/delete/:id', (req, res) => {
 
 // Waitlist Edit API
 router.get('/edit/:id', (req, res) => {
+    const sanitizedId = validator.escape(req.params.id);
 
-    Waitlist.findById(id)
+    Waitlist.findById(sanitizedId)
         .then(data => {
             if (!data) {
                 return res.status(404).json({flag: 0, msg: 'Record not found'});

@@ -20,7 +20,7 @@ function Edit() {
   const [inputsDisabled, setInputsDisabled] = React.useState(false);
   const [bookButtonsDisabled, setBookButtonsDisabled] = React.useState(true);
   const [errors, setErrors] = React.useState({});
-  const [isFormComplete, setIsFormComplete] = React.useState(false); // New state variable
+  const [isFormComplete, setIsFormComplete] = React.useState(false);
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
   let { id } = useParams();
@@ -43,7 +43,7 @@ function Edit() {
   }, [navigate]);
 
   React.useEffect(() => {
-    checkFormCompletion(); // Check form completion whenever fields change
+    checkFormCompletion();
   }, [name, desp, club, date, stime, etime]);
 
   const checkFormCompletion = () => {
@@ -156,7 +156,7 @@ function Edit() {
 
   const submitValue = (selectedHallName) => {
     axios
-      .post(`https://allotment-system-backend.vercel.app/event/register`, {
+      .put(`https://allotment-system-backend.vercel.app/waitlist/update/${id}`, {
         name,
         desp,
         club,
@@ -167,33 +167,21 @@ function Edit() {
         username,
       })
       .then((res) => {
+        console.log(res);
         if (res.data.flag === 1) {
-          alert("Record Booked Successfully");
-          // Hall booked successfully, now delete the waitlist entry
-
+          alert("Record Updated Successfully");
+  
           // Log API call
           const username = localStorage.getItem('username');
-          axios.post('https://allotment-system-backend.vercel.app/logging/evereg',{username})
+          axios.post('https://allotment-system-backend.vercel.app/logging/wedit',{username})
           .then(logRes => {
             console.log('Log entry created:', logRes);
           })
           .catch(logErr => {
-            console.error('Error logging event registration:', logErr);
+            console.error('Error logging update:', logErr);
           });
-
-          axios
-            .delete(`https://allotment-system-backend.vercel.app/waitlist/delete/${id}`)
-            .then((deleteRes) => {
-              if (deleteRes.data.flag === 1) {
-                alert("Record Deleted Successfully");
-                navigate("/WDisp");
-              } else {
-                alert("Error deleting waitlist entry");
-              }
-            })
-            .catch((err) => {
-              console.log("Error deleting waitlist entry: ", err);
-            });
+  
+          navigate("/FDisp");
         } else {
           alert("Something went wrong");
         }
@@ -218,6 +206,7 @@ function Edit() {
           alert("Record Updated Successfully");
   
           // Log API call
+          const username = localStorage.getItem('username');
           axios.post('https://allotment-system-backend.vercel.app/logging/wedit',{username})
           .then(logRes => {
             console.log('Log entry created:', logRes);
@@ -226,14 +215,13 @@ function Edit() {
             console.error('Error logging update:', logErr);
           });
   
-          navigate("/WDisp");
+          navigate("/FDisp");
         } else {
           alert("Something went wrong");
         }
       })
       .catch((err) => console.log(err));
   };
-  
 
   React.useEffect(() => {
     getData();
@@ -241,7 +229,7 @@ function Edit() {
 
   const getData = () => {
     axios
-      .get(`https://allotment-system-backend.vercel.app/event/edit/${id}`)
+      .get(`https://allotment-system-backend.vercel.app/waitlist/edit/${id}`)
       .then((res) => {
         console.log(res.data);
         setName(res.data.mydata.name);
@@ -363,13 +351,20 @@ function Edit() {
               </tr>
             </tbody>
           </table>
-          {date === originalDate && stime === originalStime && etime === originalEtime ? (
-            <button className="book-button" onClick={handleUpdate}>
+          <button
+            className="book-button"
+            onClick={handleCheckAvailability}
+            disabled={!isFormComplete}
+          >
+            Check Availability
+          </button>
+          {(date === originalDate && stime === originalStime && etime === originalEtime) && (
+            <button
+              className="book-button"
+              onClick={handleUpdate}
+              disabled={!isFormComplete}
+            >
               Update
-            </button>
-          ) : (
-            <button className="book-button" onClick={handleCheckAvailability} disabled={!isFormComplete}>
-              Check Availability
             </button>
           )}
         </form>
@@ -393,7 +388,9 @@ function Edit() {
                 </li>
               ))
             ) : (
-              <li>No halls available. Please update the date and time.</li>
+              <>
+                <li>No halls available</li>
+              </>
             )}
           </ul>
         )}

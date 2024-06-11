@@ -8,6 +8,7 @@ function WaitlistDisplay() {
     const [token, setToken] = React.useState('');
     const username = localStorage.getItem('username');
     const cat = localStorage.getItem('cat');
+    const faclname = localStorage.getItem("name");
 
     const [available, setAvailableHallsbool] = React.useState({});
     const [popupVisible, setPopupVisible] = React.useState(false);
@@ -19,7 +20,7 @@ function WaitlistDisplay() {
         if (storedToken) {
             setToken(storedToken);
         } else {
-            navigate('/');
+            navigate('/login');
         }
     }, [navigate]);
 
@@ -123,7 +124,8 @@ function WaitlistDisplay() {
     const handleBooking = (selectedSName) => {
         const eventData = {
             ...selectedEvent,
-            s_name: selectedSName
+            s_name: selectedSName,
+            faclname: faclname
         };
 
         axios.post("https://allotment-system-backend.vercel.app/event/register", eventData)
