@@ -240,9 +240,8 @@ function Edit() {
   }, []);
 
   const getData = () => {
-    console.log(id);
     axios
-      .get(`https://allotment-system.onrender.com/event/edit/${id}`)
+      .get(`https://allotment-system-backend.vercel.app/event/edit/${id}`)
       .then((res) => {
         console.log(res.data);
         setName(res.data.mydata.name);

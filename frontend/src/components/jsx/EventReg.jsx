@@ -111,6 +111,7 @@ function Register() {
         stime,
         etime,
         username,
+        faclname
       })
       .then((res) => {
         console.log(res);

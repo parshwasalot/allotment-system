@@ -266,7 +266,6 @@ function Edit() {
   }, []);
 
   const getData = () => {
-    console.log(id);
     axios
       .get(`https://allotment-system-backend.vercel.app/event/edit/${id}`)
       .then((res) => {
