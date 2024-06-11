@@ -136,31 +136,31 @@ const EditUser = () => {
             <div>
               <input
                 type="radio"
-                id="student"
+                id="S"
                 name="cat"
-                value="student"
-                checked={cat === "student"}
+                value="S"
+                checked={cat === "S"}
                 onChange={handleChange}
               />
-              <label htmlFor="student">Student</label>
+              <label htmlFor="S">Student</label>
               <input
                 type="radio"
-                id="faculty"
+                id="F"
                 name="cat"
-                value="faculty"
-                checked={cat === "faculty"}
+                value="F"
+                checked={cat === "F"}
                 onChange={handleChange}
               />
-              <label htmlFor="faculty">Faculty</label>
+              <label htmlFor="F">Faculty</label>
               <input
                 type="radio"
-                id="admin"
+                id="A"
                 name="cat"
-                value="admin"
-                checked={cat === "admin"}
+                value="A"
+                checked={cat === "A"}
                 onChange={handleChange}
               />
-              <label htmlFor="admin">Admin</label>
+              <label htmlFor="A">Admin</label>
             </div>
 
             <div className="book-button-container">

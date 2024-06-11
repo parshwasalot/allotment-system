@@ -106,9 +106,9 @@ function UserDisp() {
                     onChange={handleCategorySearchChange}
                 >
                     <option value="">Select Category</option>
-                    <option value="student">Student</option>
-                    <option value="faculty">Faculty</option>
-                    <option value="admin">Admin</option>
+                    <option value="S">Student</option>
+                    <option value="F">Faculty</option>
+                    <option value="A">Admin</option>
                 </select>
             </div>
             <table border='1'>
