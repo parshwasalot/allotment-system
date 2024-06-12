@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import bcryptjs from "bcryptjs";
 import { useNavigate } from "react-router-dom";
-import CryptoJS from "crypto-js";
 import "../css/register.css";
 
 const RegisterUser = () => {
@@ -17,7 +16,6 @@ const RegisterUser = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [token, setToken] = useState("");
-  const username = localStorage.getItem("username");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -28,15 +26,50 @@ const RegisterUser = () => {
     }
   }, [navigate]);
 
+  const debounce = (func, delay) => {
+    let debounceTimer;
+    return function (...args) {
+      const context = this;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+  };
+
+  const checkUsernameAvailability = async (username) => {
+    try {
+      const response = await axios.post("https://allotment-system-backend.vercel.app/user/check-username", {
+        username,
+      });
+      if (response.data.exists) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          username: "Username is already taken",
+        }));
+      } else {
+        setErrors((prevErrors) => {
+          const { username, ...rest } = prevErrors;
+          return rest;
+        });
+      }
+    } catch (error) {
+      console.error("Error checking username availability", error);
+    }
+  };
+
+  const debouncedCheckUsername = useCallback(debounce(checkUsernameAvailability, 500), []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     let newErrors = { ...errors };
 
     if (name === "username") {
-      if (value.length < 6 || value.length > 15) {
+      if (!/^[a-zA-Z0-9]+$/.test(value)) {
+        newErrors.username = "Username can only contain numbers and alphabets";
+      } else if (value.length < 6 || value.length > 15) {
         newErrors.username = "Username must be between 6 and 15 characters";
       } else {
         delete newErrors.username;
+        debouncedCheckUsername(value);
       }
     }
 
@@ -59,22 +92,7 @@ const RegisterUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.username.length < 6 || formData.username.length > 15) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        username: "Username must be between 6 and 15 characters",
-      }));
-      return;
-    }
-
-    if (formData.password.length < 8 || formData.password.length > 15) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: "Password must be between 8 and 15 characters",
-      }));
-      return;
-    }
-
+    if (errors.username) return;
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
@@ -98,7 +116,7 @@ const RegisterUser = () => {
       // Log API call
       try {
         const username = localStorage.getItem('username');
-        await axios.post('https://allotment-system-backend.vercel.app/logging/userreg',{username});
+        await axios.post('https://allotment-system-backend.vercel.app/logging/userreg', { username });
         console.log('Log entry created for user registration');
       } catch (logError) {
         console.error('Error logging user registration:', logError);

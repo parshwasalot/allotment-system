@@ -121,4 +121,18 @@ router.post('/changePassword/:id', async (req, res) => {
     }
 });
 
+router.post('/check-username', async (req, res) => {
+    try {
+      const { username } = req.body;
+      const user = await users.findOne({ username });
+      if (user) {
+        return res.status(200).json({ exists: true });
+      } else {
+        return res.status(200).json({ exists: false });
+      }
+    } catch (error) {
+      return res.status(500).json({ error: 'Server error' });
+    }
+  });
+
 module.exports = router;
