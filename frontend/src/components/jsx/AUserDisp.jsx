@@ -6,6 +6,7 @@ import '../css/fdisp.css';
 function UserDisp() {
     const navigate = useNavigate();
     const [token, setToken] = React.useState('');
+    const [usernameSearch, setUsernameSearch] = React.useState('');
     const [nameSearch, setNameSearch] = React.useState('');
     const [categorySearch, setCategorySearch] = React.useState('');
 
@@ -73,6 +74,11 @@ function UserDisp() {
         navigate(`/UserChPass/${id}`);
     };
 
+    const handleUsernameSearchChange = (e) => {
+        const value = e.target.value;
+        setUsernameSearch(value);
+    };
+
     const handleNameSearchChange = (e) => {
         const value = e.target.value;
         if (value.length <= 15) {
@@ -87,6 +93,7 @@ function UserDisp() {
     };
 
     const filteredData = mydata.filter((user) => 
+        (user.username && user.username.toLowerCase().includes(usernameSearch.toLowerCase())) &&
         (user.name && user.name.toLowerCase().includes(nameSearch.toLowerCase())) && 
         (user.cat && user.cat.toLowerCase().includes(categorySearch.toLowerCase()))
     );
@@ -95,6 +102,12 @@ function UserDisp() {
         <div className="display-container">
             <h2>Display Users</h2>
             <div className="search-bar">
+                <input 
+                    type="text" 
+                    placeholder="Search by username" 
+                    value={usernameSearch}
+                    onChange={handleUsernameSearchChange}
+                />
                 <input 
                     type="text" 
                     placeholder="Search by name" 
@@ -114,6 +127,7 @@ function UserDisp() {
             <table border='1'>
                 <thead>
                     <tr>
+                        <th>Username</th>
                         <th>Name</th>
                         <th>Mobile Number</th>
                         <th>Category</th>
@@ -126,6 +140,7 @@ function UserDisp() {
                     {filteredData && filteredData.length ? (
                         filteredData.map((values, i) => (
                             <tr key={i+1}>
+                                <td>{values.username}</td>
                                 <td>{values.name}</td>
                                 <td>{values.mobile}</td>
                                 <td>{values.cat}</td>
@@ -142,7 +157,7 @@ function UserDisp() {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="6">No Record Found</td>
+                            <td colSpan="7">No Record Found</td>
                         </tr>
                     )}
                 </tbody>

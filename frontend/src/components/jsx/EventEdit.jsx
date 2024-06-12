@@ -176,12 +176,11 @@ function Edit() {
           axios.post('https://allotment-system-backend.vercel.app/logging/eveedit',{username})
           .then(logRes => {
             console.log('Log entry created:', logRes);
+            navigate("/FDisp");
           })
           .catch(logErr => {
             console.error('Error logging update:', logErr);
           });
-  
-          navigate("/FDisp");
         } else {
           alert("Something went wrong");
         }
