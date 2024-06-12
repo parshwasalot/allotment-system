@@ -170,7 +170,7 @@ function Edit() {
         console.log(res);
         if (res.data.flag === 1) {
           alert("Record Updated Successfully");
-  
+
           // Log API call
           const username = localStorage.getItem('username');
           axios.post('https://allotment-system-backend.vercel.app/logging/wedit',{username})
@@ -180,7 +180,7 @@ function Edit() {
           .catch(logErr => {
             console.error('Error logging update:', logErr);
           });
-  
+
           navigate("/FDisp");
         } else {
           alert("Something went wrong");
@@ -204,7 +204,7 @@ function Edit() {
         console.log(res);
         if (res.data.flag === 1) {
           alert("Record Updated Successfully");
-  
+
           // Log API call
           const username = localStorage.getItem('username');
           axios.post('https://allotment-system-backend.vercel.app/logging/wedit',{username})
@@ -214,7 +214,7 @@ function Edit() {
           .catch(logErr => {
             console.error('Error logging update:', logErr);
           });
-  
+
           navigate("/FDisp");
         } else {
           alert("Something went wrong");
@@ -259,7 +259,7 @@ function Edit() {
   return (
     <div className="event-register-container">
       <div className="event-form-container">
-        <h3>Edit</h3>
+        <h3>Waitlist Edit</h3>
         <form className="register-form">
           <table>
             <tbody>
@@ -351,20 +351,21 @@ function Edit() {
               </tr>
             </tbody>
           </table>
-          <button
-            className="book-button"
-            onClick={handleCheckAvailability}
-            disabled={!isFormComplete}
-          >
-            Check Availability
-          </button>
-          {(date === originalDate && stime === originalStime && etime === originalEtime) && (
+          {date === originalDate && stime === originalStime && etime === originalEtime ? (
             <button
               className="book-button"
               onClick={handleUpdate}
               disabled={!isFormComplete}
             >
               Update
+            </button>
+          ) : (
+            <button
+              className="book-button"
+              onClick={handleCheckAvailability}
+              disabled={!isFormComplete}
+            >
+              Check Availability
             </button>
           )}
         </form>
@@ -390,6 +391,9 @@ function Edit() {
             ) : (
               <>
                 <li>No halls available</li>
+                <button onClick={handleUpdate} className="book-button">
+                  Update
+                </button>
               </>
             )}
           </ul>
