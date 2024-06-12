@@ -25,6 +25,19 @@ function FDisp(){
             document.body.classList.remove('fdisp-body');
         };
     }, []);
+
+    React.useEffect(() => {
+        const checkAndDeleteEvents = async () => {
+          try {
+            await axios.get('https://allotment-system-backend.vercel.app/event/check-events');
+            console.log('Checked and deleted past events');
+          } catch (error) {
+            console.error('Error checking and deleting past events', error);
+          }
+        };
+    
+        checkAndDeleteEvents();
+      }, []);
     
     const [mydata, setData] = React.useState([]);
     const [searchName, setSearchName] = React.useState('');

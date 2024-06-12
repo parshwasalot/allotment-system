@@ -100,4 +100,15 @@ router.put('/update/:id', (req, res) => {
         });
 });
 
+router.get('/check-events', async (req, res) => {
+    try {
+      const currentDate = new Date();
+      // Find and delete events where the date has passed
+      await EventModel.deleteMany({ date: { $lt: currentDate } });
+      res.status(200).json({ message: 'Past events deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Error deleting past events', error });
+    }
+  });
+
 module.exports = router;
