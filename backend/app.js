@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json());
 app.use(cors())
 
-mongoose.connect('mongodb+srv://parshwasalot:3g84EZjWNeZN23fp@cluster0.7uipnpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0&authMechanism=SCRAM-SHA-1')
+mongoose.connect('mongodb+srv://parshwasalot:0SHMrFJMWVJsOZkM@cluster0.7uipnpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 .then(()=>console.log("Connection established"))
 .catch(err => console.error(err));
 
